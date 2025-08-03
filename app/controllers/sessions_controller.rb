@@ -11,7 +11,6 @@ class SessionsController < InertiaController
 
   def create
     # Clerk handles authentication on the frontend
-    # This endpoint might not be needed, but keeping for compatibility
     redirect_to dashboard_path, notice: "Signed in successfully"
   end
 

@@ -5,13 +5,13 @@ class InertiaController < ApplicationController
   inertia_share flash: -> { flash.to_hash },
       auth: {
         user: -> { 
-          return nil unless Current.user
+          return nil unless current_user
           {
-            id: Current.user.id,
-            clerk_id: Current.user.clerk_id,
-            name: Current.user.name,
-            created_at: Current.user.created_at,
-            updated_at: Current.user.updated_at
+            id: current_user.id,
+            clerk_id: current_user.clerk_id,
+            name: current_user.name,
+            created_at: current_user.created_at,
+            updated_at: current_user.updated_at
           }
         },
         session: -> { Current.session&.as_json(only: %i[id]) }
