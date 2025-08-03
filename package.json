@@ -15,6 +15,7 @@
     "vite-plugin-ruby": "^5.1.1"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.38.1",
     "@headlessui/react": "^2.2.0",
     "@inertiajs/react": "^2.0.8",
     "@radix-ui/react-avatar": "^1.1.4",

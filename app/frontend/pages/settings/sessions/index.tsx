@@ -42,22 +42,22 @@ export default function Sessions({ sessions }: SessionsProps) {
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <p className="font-medium">
-                      {session.user_agent}
-                      {session.id === auth.session.id && (
+                      {session.user_agent || "Unknown Device"}
+                      {auth.session && session.id === auth.session.id && (
                         <Badge variant="secondary" className="ml-2">
                           Current
                         </Badge>
                       )}
                     </p>
                     <p className="text-muted-foreground text-sm">
-                      IP: {session.ip_address}
+                      IP: {session.ip_address || "Unknown"}
                     </p>
                     <p className="text-muted-foreground text-sm">
                       Active since:{" "}
                       {new Date(session.created_at).toLocaleString()}
                     </p>
                   </div>
-                  {session.id !== auth.session.id && (
+                  {auth.session && session.id !== auth.session.id && (
                     <Button variant="destructive" asChild>
                       <Link
                         method="delete"

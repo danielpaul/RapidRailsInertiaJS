@@ -1,5 +1,6 @@
 import { Link, router } from "@inertiajs/react"
 import { LogOut, Settings } from "lucide-react"
+import { useClerk } from "@clerk/clerk-react"
 
 import {
   DropdownMenuGroup,
@@ -14,27 +15,37 @@ import type { User } from "@/types"
 
 interface UserMenuContentProps {
   auth: {
-    session: {
+    session?: {
       id: string
     }
-    user: User
+    user: User // Now required since we check for null in parent
   }
 }
 
 export function UserMenuContent({ auth }: UserMenuContentProps) {
-  const { session, user } = auth
+  const { user } = auth
   const cleanup = useMobileNavigation()
+  const { signOut } = useClerk()
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     cleanup()
-    router.flushAll()
+    // Sign out from Clerk
+    await signOut()
+    // Clear local session if it exists
+    if (auth.session) {
+      router.delete(sessionPath({ id: auth.session.id }), {
+        onFinish: () => router.visit('/'),
+      })
+    } else {
+      router.visit('/')
+    }
   }
 
   return (
     <>
       <DropdownMenuLabel className="p-0 font-normal">
         <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-          <UserInfo user={user} showEmail={true} />
+          <UserInfo user={user} showEmail={false} />
         </div>
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
@@ -53,17 +64,9 @@ export function UserMenuContent({ auth }: UserMenuContentProps) {
         </DropdownMenuItem>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
-      <DropdownMenuItem asChild>
-        <Link
-          className="block w-full"
-          method="delete"
-          href={sessionPath({ id: session.id })}
-          as="button"
-          onClick={handleLogout}
-        >
-          <LogOut className="mr-2" />
-          Log out
-        </Link>
+      <DropdownMenuItem onClick={handleLogout}>
+        <LogOut className="mr-2" />
+        Log out
       </DropdownMenuItem>
     </>
   )
