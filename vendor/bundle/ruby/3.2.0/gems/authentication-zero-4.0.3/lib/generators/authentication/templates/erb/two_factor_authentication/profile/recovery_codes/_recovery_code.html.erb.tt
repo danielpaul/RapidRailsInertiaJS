@@ -1,5 +1,0 @@
-<%% if recovery_code.used? %>
-  <li><del><%%= recovery_code.code %></del></li>
-<%% else %>
-  <li><%%= recovery_code.code %></li>
-<%% end %>
