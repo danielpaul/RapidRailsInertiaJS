@@ -6,28 +6,26 @@ class SessionsController < InertiaController
   before_action :set_session, only: :destroy
 
   def new
+    # This will render the sign-in page with Clerk components
   end
 
   def create
-    if user = User.authenticate_by(email: params[:email], password: params[:password])
-      @session = user.sessions.create!
-      cookies.signed.permanent[:session_token] = {value: @session.id, httponly: true}
-
-      redirect_to dashboard_path, notice: "Signed in successfully"
-    else
-      redirect_to sign_in_path, alert: "That email or password is incorrect"
-    end
+    # Clerk handles authentication on the frontend
+    # This endpoint might not be needed, but keeping for compatibility
+    redirect_to dashboard_path, notice: "Signed in successfully"
   end
 
   def destroy
-    @session.destroy!
+    @session.destroy! if @session
     Current.session = nil
-    redirect_to settings_sessions_path, notice: "That session has been logged out", inertia: {clear_history: true}
+    # Clear Clerk session cookie
+    cookies.delete(:__session, domain: :all)
+    redirect_to root_path, notice: "Signed out successfully", inertia: {clear_history: true}
   end
 
   private
 
   def set_session
-    @session = Current.user.sessions.find(params[:id])
+    @session = Current.session
   end
 end

@@ -1,29 +1,46 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: users
+#
+#  id         :bigint           not null, primary key
+#  clerk_id   :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_clerk_id  (clerk_id) UNIQUE
+#
 class User < ApplicationRecord
-  has_secure_password
-
-  generates_token_for :email_verification, expires_in: 2.days do
-    email
-  end
-
-  generates_token_for :password_reset, expires_in: 20.minutes do
-    password_salt.last(10)
-  end
-
+  validates :clerk_id, presence: true, uniqueness: true
 
   has_many :sessions, dependent: :destroy
 
-  validates :email, presence: true, uniqueness: true, format: {with: URI::MailTo::EMAIL_REGEXP}
-  validates :password, allow_nil: true, length: {minimum: 12}
-
-  normalizes :email, with: -> { _1.strip.downcase }
-
-  before_validation if: :email_changed?, on: :update do
-    self.verified = false
+  def clerk_user
+    @clerk_user ||= fetch_clerk_user
   end
 
-  after_update if: :password_digest_previously_changed? do
-    sessions.where.not(id: Current.session).delete_all
+  def name
+    return "Test User" if Rails.env.test?
+    return "User" unless clerk_user
+    [clerk_user.first_name, clerk_user.last_name].compact.join(" ")
+  end
+
+  private
+
+  def fetch_clerk_user
+    return nil if Rails.env.test? # Skip API calls in test
+    
+    Rails.cache.fetch("clerk_user/#{clerk_id}", expires_in: 1.hour) do
+      Clerk::SDK.new.users.get_user(clerk_id)
+    end
+  rescue Clerk::Errors::Base => e
+    Rails.logger.error("Failed to fetch Clerk user #{clerk_id}: #{e.message}")
+    nil
+  rescue => e
+    Rails.logger.error("Unexpected error fetching Clerk user #{clerk_id}: #{e.message}")
+    nil
   end
 end

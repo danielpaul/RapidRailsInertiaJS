@@ -46,6 +46,9 @@ gem "inertia_rails", "~> 3.6"
 # we leave gem here to watch for security updates
 gem "authentication-zero"
 
+# Clerk SDK for authentication
+gem "clerk-sdk-ruby", "~> 3.1"
+
 # Brings Rails named routes to javascript
 gem "js-routes"
 
