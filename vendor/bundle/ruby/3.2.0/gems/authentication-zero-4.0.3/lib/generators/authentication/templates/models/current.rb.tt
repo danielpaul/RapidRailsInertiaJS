@@ -1,0 +1,14 @@
+class Current < ActiveSupport::CurrentAttributes
+  attribute :session
+  attribute :user_agent, :ip_address
+  <%- if options.tenantable? %>
+  attribute :account
+  <%- end -%>
+
+  delegate :user, to: :session, allow_nil: true
+  <%- if options.tenantable? %>
+  def session=(session)
+    super; self.account = session.user.account
+  end
+  <%- end -%>
+end

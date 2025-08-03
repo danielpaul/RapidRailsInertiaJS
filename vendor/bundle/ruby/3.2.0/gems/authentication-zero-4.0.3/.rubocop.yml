@@ -1,0 +1,16 @@
+inherit_from: https://raw.githubusercontent.com/rails/rails/v7.0.4/.rubocop.yml
+
+Style/HashSyntax:
+  Exclude:
+    - Gemfile
+
+Layout/EmptyLinesAroundBlockBody:
+  Exclude:
+    - Gemfile
+
+Layout/TrailingWhitespace:
+  Exclude:
+    - config/initializers/filter_parameter_logging.rb
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

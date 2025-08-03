@@ -1,0 +1,24 @@
+<p style="color: red"><%%= alert %></p>
+
+<%%= form_with(url: two_factor_authentication_challenge_totp_path) do |form| %>
+  <div>
+    <%%= form.label :code do %>
+      <h1>Next, open the 2FA authenticator app on your phone and type the six digit code below:</h1>
+    <%% end %>
+    <%%= form.text_field :code, autofocus: true, required: true, autocomplete: :off %>
+  </div>
+
+  <div>
+    <%%= form.submit "Verify" %>
+  </div>
+<%% end %>
+
+<div>
+  <p><strong>Don't have your phone?</strong></p>
+  <div><%%= link_to "Use a recovery code to access your account.", new_two_factor_authentication_challenge_recovery_codes_path %></div>
+  <%- if webauthn? %>
+  <%% if @user.security_keys.exists? %>
+    <div><%%= link_to "Use a security key to access your account.", new_two_factor_authentication_challenge_security_keys_path %></div>
+  <%% end %>
+  <%- end -%>
+</div>

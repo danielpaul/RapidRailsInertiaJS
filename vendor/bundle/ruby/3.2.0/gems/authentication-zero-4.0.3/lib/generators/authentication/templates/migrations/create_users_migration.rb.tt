@@ -1,0 +1,26 @@
+class <%= migration_class_name %> < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+  def change
+    create_table :users do |t|
+      t.string :email,           null: false, index: { unique: true }
+      t.string :password_digest, null: false
+
+      t.boolean :verified, null: false, default: false
+      <%- if two_factor? %>
+      t.boolean :otp_required_for_sign_in, null: false, default: false
+      t.string  :otp_secret, null: false
+      <%- end -%>
+      <%- if webauthn? %>
+      t.string :webauthn_id, null: false
+      <%- end -%>
+      <%- if omniauthable? %>
+      t.string :provider
+      t.string :uid
+      <%- end -%>
+      <%- if options.tenantable? %>
+      t.references :account, null: false, foreign_key: true
+      <%- end -%>
+
+      t.timestamps
+    end
+  end
+end
