@@ -3,13 +3,13 @@
 Rails.application.routes.draw do
   get  "sign_in", to: "sessions#new", as: :sign_in
   post "sign_in", to: "sessions#create"
+  get  "switch", to: "sessions#switch", as: :switch_account
   
   resources :sessions, only: [:destroy]
 
   get :dashboard, to: "dashboard#index"
 
   namespace :settings do
-    resource :profile, only: [:show, :update]
     resources :sessions, only: [:index]
     inertia :appearance
   end

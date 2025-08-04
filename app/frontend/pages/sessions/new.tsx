@@ -1,13 +1,13 @@
-import { Head } from "@inertiajs/react"
 import { SignIn } from "@clerk/clerk-react"
+import { Head } from "@inertiajs/react"
 
 import AuthLayout from "@/layouts/auth-layout"
 
-export default function Login() {
+export default function SignInSignUp() {
   return (
     <AuthLayout
-      title="Sign in to your account"
-      description="Welcome back! Sign in to continue"
+      title="Welcome"
+      description="Sign in to your account or create a new one"
     >
       <Head title="Sign in" />
       
@@ -16,6 +16,7 @@ export default function Login() {
           routing="path"
           path="/sign_in"
           redirectUrl="/dashboard"
+          fallbackRedirectUrl="/switch"
           appearance={{
             elements: {
               rootBox: "w-full max-w-md",
@@ -23,6 +24,18 @@ export default function Login() {
             }
           }}
         />
+      </div>
+      
+      <div className="mt-6 text-center text-xs text-muted-foreground">
+        By clicking continue, you agree to our{" "}
+        <a href="#" className="underline underline-offset-4 hover:text-primary">
+          Terms of Service
+        </a>{" "}
+        and{" "}
+        <a href="#" className="underline underline-offset-4 hover:text-primary">
+          Privacy Policy
+        </a>
+        .
       </div>
     </AuthLayout>
   )

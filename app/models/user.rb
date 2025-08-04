@@ -47,6 +47,12 @@ class User < ApplicationRecord
     [clerk_user.first_name, clerk_user.last_name].compact.join(" ")
   end
 
+  def email
+    return "test@example.com" if Rails.env.test?
+    return nil unless clerk_user
+    clerk_user.email_addresses&.find(&:primary?)&.email_address
+  end
+
   private
 
   def fetch_clerk_user

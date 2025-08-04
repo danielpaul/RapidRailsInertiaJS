@@ -8,7 +8,8 @@ class InertiaController < ApplicationController
           return nil unless current_user
           {
             id: current_user.hashid,
-            name: current_user.name
+            name: current_user.name,
+            email: current_user.email
           }
         },
         session: -> { Current.session&.as_json(only: %i[id]) }
