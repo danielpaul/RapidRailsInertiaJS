@@ -18,17 +18,7 @@ module Authenticatable
   def current_user
     return @current_user if defined?(@current_user)
 
-    if Rails.env.development? && request.headers["Authorization"]&.start_with?("Bearer DEV_BYPASS_TOKEN:")
-      user_id = request.headers["Authorization"].split(":").last
-      @current_user = User.find_by(id: user_id)
-      # Set up session for dev bypass
-      if @current_user
-        Current.session ||= @current_user.sessions.first || @current_user.sessions.create!(
-          user_agent: request.user_agent,
-          ip_address: request.ip
-        )
-      end
-    elsif Rails.env.test? && Current.session
+    if Rails.env.test? && Current.session
       # Test environment: use Current.session if available
       @current_user = Current.session.user
     elsif !Rails.env.test? && (user_id = clerk.user_id)
@@ -46,7 +36,7 @@ module Authenticatable
   end
 
   def clerk_user
-    # NOTE: This makes an additional request and attempts to cache it.
+    # NOTE: This method should be mocked in tests
     return nil if Rails.env.test?
     clerk.user
   end

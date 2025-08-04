@@ -49,6 +49,9 @@ gem "authentication-zero"
 # Clerk SDK for authentication
 gem "clerk-sdk-ruby", "~> 3.1"
 
+# Generate short unique IDs from integers
+gem "hashids", "~> 1.0"
+
 # Brings Rails named routes to javascript
 gem "js-routes"
 

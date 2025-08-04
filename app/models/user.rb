@@ -18,6 +18,25 @@ class User < ApplicationRecord
 
   has_many :sessions, dependent: :destroy
 
+  # Hashids for obfuscating user IDs in frontend
+  def self.hashids
+    @hashids ||= Hashids.new("user-salt", 8)
+  end
+
+  def to_param
+    self.class.hashids.encode(id)
+  end
+
+  def self.find_by_hashid(hashid)
+    decoded_ids = hashids.decode(hashid)
+    return nil if decoded_ids.empty?
+    find_by(id: decoded_ids.first)
+  end
+
+  def hashid
+    self.class.hashids.encode(id)
+  end
+
   def clerk_user
     @clerk_user ||= fetch_clerk_user
   end
