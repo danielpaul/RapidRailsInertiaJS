@@ -1,8 +1,7 @@
 import { useForm } from "@inertiajs/react"
-import { type FormEventHandler, useRef } from "react"
+import { type FormEventHandler } from "react"
 
 import HeadingSmall from "@/components/heading-small"
-import InputError from "@/components/input-error"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -13,40 +12,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { usersPath } from "@/routes"
 
-interface DeleteUserForm {
-  password_challenge: string
-}
-
 export default function DeleteUser() {
-  const passwordInput = useRef<HTMLInputElement>(null)
   const {
-    data,
-    setData,
     delete: destroy,
     processing,
-    reset,
-    errors,
-    clearErrors,
-  } = useForm<Required<DeleteUserForm>>({ password_challenge: "" })
+  } = useForm()
 
   const deleteUser: FormEventHandler = (e) => {
     e.preventDefault()
 
     destroy(usersPath(), {
       preserveScroll: true,
-      onSuccess: () => closeModal(),
-      onError: () => passwordInput.current?.focus(),
-      onFinish: () => reset(),
     })
-  }
-
-  const closeModal = () => {
-    clearErrors()
-    reset()
   }
 
   return (
@@ -73,34 +52,12 @@ export default function DeleteUser() {
             </DialogTitle>
             <DialogDescription>
               Once your account is deleted, all of its resources and data will
-              also be permanently deleted. Please enter your password to confirm
-              you would like to permanently delete your account.
+              also be permanently deleted from both our system and Clerk.
             </DialogDescription>
-            <form className="space-y-6" onSubmit={deleteUser}>
-              <div className="grid gap-2">
-                <Label htmlFor="password_challenge" className="sr-only">
-                  Password
-                </Label>
-
-                <Input
-                  id="password_challenge"
-                  type="password"
-                  name="password_challenge"
-                  ref={passwordInput}
-                  value={data.password_challenge}
-                  onChange={(e) =>
-                    setData("password_challenge", e.target.value)
-                  }
-                  placeholder="Password"
-                  autoComplete="current-password"
-                />
-
-                <InputError message={errors.password_challenge} />
-              </div>
-
+            <form onSubmit={deleteUser}>
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button variant="secondary" onClick={closeModal}>
+                  <Button variant="secondary">
                     Cancel
                   </Button>
                 </DialogClose>

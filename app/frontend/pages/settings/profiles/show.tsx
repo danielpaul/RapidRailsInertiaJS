@@ -1,6 +1,7 @@
 import { Head } from "@inertiajs/react"
 import { UserProfile } from "@clerk/clerk-react"
 
+import DeleteUser from "@/components/delete-user"
 import AppLayout from "@/layouts/app-layout"
 import SettingsLayout from "@/layouts/settings/layout"
 import { settingsProfilePath } from "@/routes"
@@ -21,6 +22,7 @@ export default function Profile() {
       <SettingsLayout>
         <div className="space-y-6">
           <UserProfile />
+          <DeleteUser />
         </div>
       </SettingsLayout>
     </AppLayout>

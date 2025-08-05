@@ -2,7 +2,6 @@ import type { LucideIcon } from "lucide-react"
 
 export interface Auth {
   user: User | null
-  session?: Pick<Session, "id">
 }
 
 export interface BreadcrumbItem {
@@ -32,16 +31,9 @@ export interface User {
   id: number
   clerk_id: string
   name: string
-  email?: string
+  email: string
   avatar?: string
   created_at: string
   updated_at: string
   [key: string]: unknown // This allows for additional properties...
-}
-
-export interface Session {
-  id: string
-  user_agent?: string
-  ip_address?: string
-  created_at: string
 }

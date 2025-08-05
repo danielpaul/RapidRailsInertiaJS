@@ -39,7 +39,8 @@ class User < ApplicationRecord
   def fetch_clerk_user
     return nil if Rails.env.test? # Skip API calls in test
     
-    Rails.cache.fetch("clerk_user/#{clerk_id}", expires_in: 1.hour) do
+    # Cache for longer period since we'll clear cache via webhook when Clerk user is updated
+    Rails.cache.fetch("clerk_user/#{clerk_id}", expires_in: 24.hours) do
       Clerk::SDK.new.users.get_user(clerk_id)
     end
   rescue Clerk::Errors::Base => e

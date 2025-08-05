@@ -10,7 +10,6 @@ import {
   settingsEmailPath,
   settingsPasswordPath,
   settingsProfilePath,
-  settingsSessionsPath,
 } from "@/routes"
 import type { NavItem } from "@/types"
 
@@ -28,11 +27,6 @@ const sidebarNavItems: NavItem[] = [
   {
     title: "Password",
     href: settingsPasswordPath(),
-    icon: null,
-  },
-  {
-    title: "Sessions",
-    href: settingsSessionsPath(),
     icon: null,
   },
   {

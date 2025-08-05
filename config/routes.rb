@@ -6,11 +6,13 @@ Rails.application.routes.draw do
   get  "switch", to: "sessions#switch", as: :switch_account
   
   resources :sessions, only: [:destroy]
+  resources :users, only: [:destroy]
 
   get :dashboard, to: "dashboard#index"
 
   namespace :settings do
     inertia :appearance
+    inertia :profile, "profiles#show"
   end
 
   root "home#index"
