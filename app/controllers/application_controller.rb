@@ -7,13 +7,9 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :set_current_request_details
-  before_action :authenticate
+  before_action :authenticate_user!
 
   private
-
-  def authenticate
-    redirect_to sign_in_path unless user_signed_in?
-  end
 
   def require_no_authentication
     return unless user_signed_in?

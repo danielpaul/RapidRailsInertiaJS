@@ -11,7 +11,7 @@ module Authenticatable
   private
 
   def authenticate_user!
-    render json: { error: "Unauthorized" }, status: :unauthorized unless user_signed_in?
+    redirect_to sign_in_path unless user_signed_in?
   end
   alias require_clerk_session! authenticate_user!
 
@@ -23,13 +23,6 @@ module Authenticatable
       @current_user = Current.session.user
     elsif !Rails.env.test? && (user_id = clerk.user_id)
       @current_user = User.find_or_create_by(clerk_id: user_id)
-      # Set up session tracking
-      if @current_user
-        Current.session = @current_user.sessions.find_or_create_by(
-          user_agent: request.user_agent,
-          ip_address: request.ip
-        )
-      end
     else
       @current_user = nil
     end
