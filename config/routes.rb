@@ -10,7 +10,6 @@ Rails.application.routes.draw do
   get :dashboard, to: "dashboard#index"
 
   namespace :settings do
-    resources :sessions, only: [:index]
     inertia :appearance
   end
 

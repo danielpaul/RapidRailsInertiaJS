@@ -4,8 +4,8 @@ module AuthenticationHelpers
   extend ActiveSupport::Concern
 
   def sign_in_as(user)
-    session = user.sessions.create!
-    Current.session = session
+    # Simulate clerk token in session for testing
+    session[:clerk_token] = "test_token"
     
     # Mock Clerk session cookie for tests
     if defined?(cookies)
@@ -14,7 +14,7 @@ module AuthenticationHelpers
   end
 
   def sign_out
-    Current.session = nil
+    session[:clerk_token] = nil if defined?(session)
     if defined?(cookies)
       cookies.delete(:__session)
     end

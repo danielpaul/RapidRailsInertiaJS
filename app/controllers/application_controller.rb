@@ -7,16 +7,8 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :set_current_request_details
-  before_action :authenticate_user!
 
   private
-
-  def require_no_authentication
-    return unless user_signed_in?
-
-    flash[:notice] = "You are already signed in"
-    redirect_to root_path
-  end
 
   def set_current_request_details
     Current.user_agent = request.user_agent

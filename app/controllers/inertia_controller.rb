@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class InertiaController < ApplicationController
+  before_action :authenticate_user!
+  
   inertia_config default_render: true
   inertia_share flash: -> { flash.to_hash },
       auth: {
@@ -11,8 +13,7 @@ class InertiaController < ApplicationController
             name: current_user.name,
             email: current_user.email
           }
-        },
-        session: -> { Current.session&.as_json(only: %i[id]) }
+        }
       }
 
   private

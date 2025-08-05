@@ -1,9 +1,40 @@
-import { SignIn } from "@clerk/clerk-react"
-import { Head } from "@inertiajs/react"
+import { SignIn, useAuth } from "@clerk/clerk-react"
+import { Head, router } from "@inertiajs/react"
+import { useEffect } from "react"
 
 import AuthLayout from "@/layouts/auth-layout"
 
 export default function SignInSignUp() {
+  const { getToken, isSignedIn } = useAuth()
+
+  useEffect(() => {
+    const createSession = async () => {
+      if (isSignedIn) {
+        try {
+          const token = await getToken()
+          if (token) {
+            // Post the clerk token to our backend to create a session
+            await fetch('/sign_in', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+              },
+              body: JSON.stringify({ clerk_token: token })
+            })
+            
+            // Redirect after successful session creation
+            router.visit('/dashboard')
+          }
+        } catch (error) {
+          console.error('Failed to create session:', error)
+        }
+      }
+    }
+
+    createSession()
+  }, [isSignedIn, getToken])
+
   return (
     <AuthLayout
       title="Welcome"
