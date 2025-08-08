@@ -42,12 +42,8 @@ gem "vite_rails", "~> 3.0"
 # The Rails adapter for Inertia.js [https://inertia-rails.dev]
 gem "inertia_rails", "~> 3.6"
 
-# An authentication system generator for Rails applications
-# we leave gem here to watch for security updates
-gem "authentication-zero"
-
 # Clerk SDK for authentication
-gem "clerk-sdk-ruby", "~> 3.1"
+gem "clerk-sdk-ruby", require: "clerk"
 
 # Generate short unique IDs from integers with Rails integration
 gem "hashid-rails", "~> 1.0"

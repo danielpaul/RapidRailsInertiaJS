@@ -75,7 +75,6 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.3)
-    authentication-zero (4.0.3)
     base64 (0.3.0)
     bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.1)
@@ -98,7 +97,12 @@ GEM
       xpath (~> 3.2)
     childprocess (5.1.0)
       logger (~> 1.5)
-    clerk-sdk-ruby (3.3.0)
+    clerk-http-client (2.0.0)
+      faraday (>= 1.0.1, < 3.0)
+      faraday-multipart
+      marcel
+    clerk-sdk-ruby (4.2.1)
+      clerk-http-client (~> 2.0)
       concurrent-ruby (~> 1.1)
       faraday (>= 1.4.1, < 3.0)
       jwt (~> 2.5)
@@ -127,6 +131,8 @@ GEM
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
+    faraday-multipart (1.1.1)
+      multipart-post (~> 2.0)
     faraday-net_http (3.4.1)
       net-http (>= 0.5.0)
     fugit (1.11.1)
@@ -189,6 +195,7 @@ GEM
     mini_mime (1.1.5)
     minitest (5.25.5)
     msgpack (1.8.0)
+    multipart-post (2.4.1)
     mutex_m (0.3.0)
     net-http (0.6.0)
       uri
@@ -423,12 +430,11 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  authentication-zero
   bcrypt (~> 3.1.7)
   bootsnap
   brakeman
   capybara
-  clerk-sdk-ruby (~> 3.1)
+  clerk-sdk-ruby
   debug
   factory_bot_rails
   hashid-rails (~> 1.0)

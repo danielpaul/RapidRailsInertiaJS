@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-require 'clerk'
-
-# Configure Clerk SDK
-Clerk.configure do |config|
-  config.api_key = Rails.application.credentials.dig(:clerk, :api_key) || ENV['CLERK_API_KEY']
-  config.base_url = Rails.application.credentials.dig(:clerk, :base_url) || ENV['CLERK_API_BASE']
+Clerk.configure do |c|
+  c.secret_key = Rails.application.credentials.dig(:clerk_secret_key) || ENV["CLERK_SECRET_KEY"] || "sk_test_1234567890"
+  c.logger = Rails.logger if Rails.env.development?
 end
