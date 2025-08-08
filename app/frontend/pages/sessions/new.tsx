@@ -46,14 +46,7 @@ export default function SignInSignUp() {
         <SignIn 
           routing="path"
           path="/sign_in"
-          redirectUrl="/dashboard"
           fallbackRedirectUrl="/switch"
-          appearance={{
-            elements: {
-              rootBox: "w-full max-w-md",
-              card: "shadow-none border-0 bg-transparent",
-            }
-          }}
         />
       </div>
       

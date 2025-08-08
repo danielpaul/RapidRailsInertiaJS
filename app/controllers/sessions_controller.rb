@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SessionsController < InertiaController
-  skip_before_action :authenticate_user!, only: %i[ new create switch ]
+  skip_before_action :authenticate_user!, only: %i[ new create  ]
 
   def new
     if user_signed_in?
@@ -11,10 +11,6 @@ class SessionsController < InertiaController
   end
 
   def switch
-    if user_signed_in?
-      flash[:notice] = "You are already signed in"
-      redirect_to root_path
-    end
   end
 
   def create
