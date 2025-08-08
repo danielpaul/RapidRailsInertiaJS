@@ -3,7 +3,7 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
 
-  def destroy
+  def destroy_current
     begin
       # Delete user from Clerk first
       clerk_sdk = Clerk::SDK.new

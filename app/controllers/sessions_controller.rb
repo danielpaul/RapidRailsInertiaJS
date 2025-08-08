@@ -4,23 +4,23 @@ class SessionsController < InertiaController
   skip_before_action :authenticate_user!, only: %i[ new create switch ]
 
   def new
-    return unless user_signed_in?
-
-    flash[:notice] = "You are already signed in"
-    redirect_to root_path
+    if user_signed_in?
+      flash[:notice] = "You are already signed in"
+      redirect_to root_path
+    end
   end
 
   def switch
-    return unless user_signed_in?
-
-    flash[:notice] = "You are already signed in"
-    redirect_to root_path
+    if user_signed_in?
+      flash[:notice] = "You are already signed in"
+      redirect_to root_path
+    end
   end
 
   def create
     # This endpoint will handle Clerk token posting from frontend
     clerk_token = params[:clerk_token]
-    
+
     if clerk_token.present?
       # Store the clerk token as session - this will be the exact token from frontend
       session[:clerk_token] = clerk_token

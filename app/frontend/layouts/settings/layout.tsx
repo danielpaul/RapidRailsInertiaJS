@@ -7,8 +7,6 @@ import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 import {
   settingsAppearancePath,
-  settingsEmailPath,
-  settingsPasswordPath,
   settingsProfilePath,
 } from "@/routes"
 import type { NavItem } from "@/types"
@@ -17,16 +15,6 @@ const sidebarNavItems: NavItem[] = [
   {
     title: "Profile",
     href: settingsProfilePath(),
-    icon: null,
-  },
-  {
-    title: "Email",
-    href: settingsEmailPath(),
-    icon: null,
-  },
-  {
-    title: "Password",
-    href: settingsPasswordPath(),
     icon: null,
   },
   {

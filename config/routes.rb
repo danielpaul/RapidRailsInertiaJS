@@ -4,9 +4,8 @@ Rails.application.routes.draw do
   get  "sign_in", to: "sessions#new", as: :sign_in
   post "sign_in", to: "sessions#create"
   get  "switch", to: "sessions#switch", as: :switch_account
-  
   resources :sessions, only: [:destroy]
-  resources :users, only: [:destroy]
+  delete :users, to: "users#destroy_current", as: :users
 
   get :dashboard, to: "dashboard#index"
 
