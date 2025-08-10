@@ -27,12 +27,13 @@ export function UserMenuContent({ auth }: UserMenuContentProps) {
   const cleanup = useMobileNavigation()
   const { signOut, openUserProfile } = useClerk()
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     cleanup()
 
-    // Sign out from Clerk
-    await signOut()
-    router.visit("/")
+    // Sign out from Clerk and redirect
+    void signOut().then(() => {
+      router.visit("/")
+    })
   }
 
   const handleProfile = () => {

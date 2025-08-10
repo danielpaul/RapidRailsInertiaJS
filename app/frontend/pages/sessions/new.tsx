@@ -21,7 +21,7 @@ export default function SignInSignUp() {
                 "X-CSRF-Token":
                   document
                     .querySelector('meta[name="csrf-token"]')
-                    ?.getAttribute("content") || "",
+                    ?.getAttribute("content") ?? "",
               },
               body: JSON.stringify({ clerk_token: token }),
             })
@@ -35,7 +35,7 @@ export default function SignInSignUp() {
       }
     }
 
-    createSession()
+    void createSession()
   }, [isSignedIn, getToken])
 
   return (

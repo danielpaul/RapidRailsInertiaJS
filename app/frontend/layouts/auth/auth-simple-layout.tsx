@@ -30,7 +30,7 @@ export default function AuthSimpleLayout({
               {title && <span className="sr-only">{title}</span>}
             </Link>
 
-            {(title || description) && (
+            {(title ?? description) && (
               <div className="space-y-2 text-center">
                 {title && <h1 className="text-xl font-medium">{title}</h1>}
                 {description && (

@@ -9,7 +9,9 @@ interface PersistentLayoutProps {
 }
 
 // Import Clerk publishable key
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as
+  | string
+  | undefined
 
 export default function PersistentLayout({ children }: PersistentLayoutProps) {
   useFlash()
