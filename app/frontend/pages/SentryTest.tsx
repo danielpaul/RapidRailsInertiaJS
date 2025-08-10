@@ -1,10 +1,5 @@
 import { type FC } from "react"
 
-interface SentryTestProps {
-  test_type: string
-  message: string
-}
-
 const SentryTest: FC<{ test_type: string; message: string }> = ({ test_type, message }) => {
   const triggerFrontendError = () => {
     // This will trigger a frontend error for Sentry testing
