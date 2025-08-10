@@ -46,7 +46,7 @@ export function NavUser() {
               isMobile ? "bottom" : state === "collapsed" ? "left" : "bottom"
             }
           >
-            <UserMenuContent auth={{...auth, user: auth.user}} />
+            <UserMenuContent auth={{ ...auth, user: auth.user }} />
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

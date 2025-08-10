@@ -1,6 +1,6 @@
-import { Link, router } from "@inertiajs/react"
-import { LogOut, Settings, User as UserIcon, Shuffle } from "lucide-react"
 import { useClerk } from "@clerk/clerk-react"
+import { Link, router } from "@inertiajs/react"
+import { LogOut, Settings, Shuffle, User as UserIcon } from "lucide-react"
 
 import {
   DropdownMenuGroup,
@@ -27,12 +27,13 @@ export function UserMenuContent({ auth }: UserMenuContentProps) {
   const cleanup = useMobileNavigation()
   const { signOut, openUserProfile } = useClerk()
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     cleanup()
 
-    // Sign out from Clerk
-    await signOut()
-    router.visit('/')
+    // Sign out from Clerk and redirect
+    void signOut().then(() => {
+      router.visit("/")
+    })
   }
 
   const handleProfile = () => {

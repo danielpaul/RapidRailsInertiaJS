@@ -1,5 +1,5 @@
-import type { ReactNode } from "react"
 import { ClerkProvider } from "@clerk/clerk-react"
+import type { ReactNode } from "react"
 
 import { Toaster } from "@/components/ui/sonner"
 import { useFlash } from "@/hooks/use-flash"
@@ -9,26 +9,24 @@ interface PersistentLayoutProps {
 }
 
 // Import Clerk publishable key
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as
+  | string
+  | undefined
 
 export default function PersistentLayout({ children }: PersistentLayoutProps) {
   useFlash()
-  
+
   const content = (
     <>
       {children}
       <Toaster richColors />
     </>
   )
-  
+
   // Only wrap with ClerkProvider if we have a publishable key
   if (clerkPubKey) {
-    return (
-      <ClerkProvider publishableKey={clerkPubKey}>
-        {content}
-      </ClerkProvider>
-    )
+    return <ClerkProvider publishableKey={clerkPubKey}>{content}</ClerkProvider>
   }
-  
+
   return content
 }
