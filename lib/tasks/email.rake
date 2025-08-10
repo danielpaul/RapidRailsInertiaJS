@@ -39,17 +39,7 @@ namespace :email do
       generate_token_for: ->(purpose) { SecureRandom.hex(20) }
     )
 
-    begin
-      puts "Sending test email to: #{email}"
-      UserMailer.with(user: test_user).password_reset.deliver_now
-      puts "✅ Test email sent successfully!"
-
-      if Rails.env.development?
-        puts "💡 In development, check your browser for the email preview"
-      end
-    rescue => e
-      puts "❌ Failed to send test email: #{e.message}"
-      puts "Check your email configuration and credentials"
-    end
+    puts "❌ No mailer methods available for testing"
+    puts "Add mailer methods to UserMailer to test email delivery"
   end
 end

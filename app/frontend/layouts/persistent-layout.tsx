@@ -1,5 +1,5 @@
-import type { ReactNode } from "react"
 import { ClerkProvider } from "@clerk/clerk-react"
+import type { ReactNode } from "react"
 
 import { Toaster } from "@/components/ui/sonner"
 import { useFlash } from "@/hooks/use-flash"

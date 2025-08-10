@@ -72,9 +72,6 @@ postmark:
    ```
 4. Verify the sender signature in your Postmark account
 
-**Available Mailers:**
-- `UserMailer.password_reset` - Sends password reset emails
-- `UserMailer.email_verification` - Sends email verification emails
 
 ### Optional Environment Variables
 
