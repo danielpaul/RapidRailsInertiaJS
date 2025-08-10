@@ -7,6 +7,7 @@ A modern full-stack starter application with Rails backend and React frontend us
 - [Inertia Rails](https://inertia-rails.dev) & [Vite Rails](https://vite-ruby.netlify.app) setup
 - [React](https://react.dev) frontend with TypeScript & [shadcn/ui](https://ui.shadcn.com) component library
 - [Clerk](https://clerk.com) User authentication system
+- Email delivery with [Postmark](https://postmarkapp.com) (production) and [letter_opener](https://github.com/ryanb/letter_opener) (development)
 - [Kamal](https://kamal-deploy.org/) for deployment
 - Optional SSR support
 
@@ -33,11 +34,22 @@ This application requires the following environment variables for proper functio
   - Required for frontend authentication components
 
 #### Rails Credentials
-The following secret should be added to Rails encrypted credentials using `rails credentials:edit`:
+The following secrets should be added to Rails encrypted credentials using `rails credentials:edit`:
 ```yaml
 clerk:
   api_key: "sk_test_your_secret_key_here"  # Your Clerk secret key
+
+# For production email delivery
+postmark:
+  api_token: "your_postmark_server_api_token_here"
 ```
+
+#### Email Delivery
+- `FROM_EMAIL` - Email address used as sender for all outgoing emails
+  - Must be verified in your Postmark account for production
+  - Default: `noreply@example.com`
+
+**Email Setup:** See [EMAIL_SETUP.md](EMAIL_SETUP.md) for complete email configuration instructions.
 
 ### Optional Environment Variables
 
