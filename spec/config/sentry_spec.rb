@@ -12,10 +12,10 @@ RSpec.describe "Sentry Configuration" do
 
     it "does not initialize Sentry in development environment" do
       allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("development"))
-      
+
       # Reload initializer
       load Rails.root.join("config/initializers/sentry.rb")
-      
+
       expect(Sentry.configuration.dsn).to be_nil
     end
 
@@ -54,7 +54,7 @@ RSpec.describe "Sentry Configuration" do
       original_env[key] = ENV[key]
       ENV[key] = value
     end
-    
+
     yield
   ensure
     original_env.each do |key, value|

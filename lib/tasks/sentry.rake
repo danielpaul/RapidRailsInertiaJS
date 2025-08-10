@@ -32,10 +32,10 @@ namespace :sentry do
     # Check if Sentry should be active
     if Rails.env.production? && sentry_dsn.present?
       puts "✅ Sentry should be ACTIVE (production + DSN present)"
-      
+
       # Check if Sentry is actually initialized
       begin
-        require 'sentry-ruby'
+        require "sentry-ruby"
         if Sentry.configuration.dsn.present?
           puts "✅ Sentry is initialized and configured"
           puts "   Environment: #{Sentry.configuration.environment}"

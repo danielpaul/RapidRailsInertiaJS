@@ -11,9 +11,11 @@ if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_DSN) {
     Sentry.init({
       dsn: import.meta.env.VITE_SENTRY_DSN as string,
       environment: (import.meta.env.VITE_RAILS_ENV as string) ?? "production",
-      tracesSampleRate: parseFloat((import.meta.env.VITE_SENTRY_TRACES_SAMPLE_RATE as string) ?? "0.1"),
+      tracesSampleRate: parseFloat(
+        (import.meta.env.VITE_SENTRY_TRACES_SAMPLE_RATE as string) ?? "0.1",
+      ),
       release: (import.meta.env.VITE_GIT_REV as string) ?? "unknown",
-      
+
       // Integration configurations
       integrations: [
         Sentry.browserTracingIntegration(),
@@ -22,7 +24,7 @@ if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_DSN) {
           blockAllMedia: false,
         }),
       ],
-      
+
       // Session Replay sample rate
       replaysSessionSampleRate: 0.1,
       replaysOnErrorSampleRate: 1.0,
