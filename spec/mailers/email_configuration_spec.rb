@@ -51,9 +51,5 @@ RSpec.describe "Email Configuration" do
         ENV.delete("FROM_EMAIL")
       end
     end
-
-
-
-
   end
 end
