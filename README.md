@@ -48,8 +48,33 @@ postmark:
 - `FROM_EMAIL` - Email address used as sender for all outgoing emails
   - Must be verified in your Postmark account for production
   - Default: `noreply@example.com`
+- `HOST` - Your application's domain name for generating links in emails (production)
 
-**Email Setup:** See [EMAIL_SETUP.md](EMAIL_SETUP.md) for complete email configuration instructions.
+**Email Setup:** This application uses **Postmark** for production email delivery and **letter_opener** for development email preview.
+
+**Development:** No setup required - emails automatically open in your browser.
+
+**Production Setup:**
+1. Sign up for a [Postmark account](https://postmarkapp.com/) and create a server
+2. Add your Postmark API token to Rails credentials:
+   ```bash
+   rails credentials:edit
+   ```
+   Add:
+   ```yaml
+   postmark:
+     api_token: "your_postmark_server_api_token_here"
+   ```
+3. Set environment variables:
+   ```bash
+   FROM_EMAIL=noreply@yourdomain.com
+   HOST=yourdomain.com
+   ```
+4. Verify the sender signature in your Postmark account
+
+**Available Mailers:**
+- `UserMailer.password_reset` - Sends password reset emails
+- `UserMailer.email_verification` - Sends email verification emails
 
 ### Optional Environment Variables
 
@@ -101,6 +126,10 @@ This application uses Clerk webhooks to automatically sync user data changes. To
 ```bash
 # Clerk Configuration
 VITE_CLERK_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
+
+# Email Configuration (production)
+# FROM_EMAIL=noreply@yourdomain.com
+# HOST=yourdomain.com
 
 # Optional: Database (defaults to SQLite in development)
 # DATABASE_URL=postgresql://user:password@localhost/myapp_development
