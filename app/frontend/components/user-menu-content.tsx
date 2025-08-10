@@ -1,5 +1,5 @@
 import { Link, router } from "@inertiajs/react"
-import { LogOut, Settings } from "lucide-react"
+import { LogOut, Settings, User as UserIcon } from "lucide-react"
 import { useClerk } from "@clerk/clerk-react"
 
 import {
@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { UserInfo } from "@/components/user-info"
 import { useMobileNavigation } from "@/hooks/use-mobile-navigation"
-import { settingsProfilePath } from "@/routes"
+import { settingsAppearancePath } from "@/routes"
 import type { User } from "@/types"
 
 interface UserMenuContentProps {
@@ -25,7 +25,7 @@ interface UserMenuContentProps {
 export function UserMenuContent({ auth }: UserMenuContentProps) {
   const { user } = auth
   const cleanup = useMobileNavigation()
-  const { signOut } = useClerk()
+  const { signOut, openUserProfile } = useClerk()
 
   const handleLogout = async () => {
     cleanup()
@@ -33,6 +33,11 @@ export function UserMenuContent({ auth }: UserMenuContentProps) {
     // Sign out from Clerk
     await signOut()
     router.visit('/')
+  }
+
+  const handleProfile = () => {
+    cleanup()
+    openUserProfile()
   }
 
   return (
@@ -44,10 +49,14 @@ export function UserMenuContent({ auth }: UserMenuContentProps) {
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
+        <DropdownMenuItem onClick={handleProfile}>
+          <UserIcon className="mr-2" />
+          Profile
+        </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link
             className="block w-full"
-            href={settingsProfilePath()}
+            href={settingsAppearancePath()}
             as="button"
             prefetch
             onClick={cleanup}

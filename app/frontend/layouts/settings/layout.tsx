@@ -7,16 +7,10 @@ import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 import {
   settingsAppearancePath,
-  settingsProfilePath,
 } from "@/routes"
 import type { NavItem } from "@/types"
 
 const sidebarNavItems: NavItem[] = [
-  {
-    title: "Profile",
-    href: settingsProfilePath(),
-    icon: null,
-  },
   {
     title: "Appearance",
     href: settingsAppearancePath(),

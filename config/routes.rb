@@ -3,13 +3,14 @@
 Rails.application.routes.draw do
   get  "sign_in", to: "sessions#new", as: :sign_in
   get  "switch", to: "sessions#switch", as: :switch_account
-  delete :users, to: "users#destroy_current", as: :users
+
+  # Clerk webhook endpoint
+  post "webhooks/clerk", to: "webhooks#clerk"
 
   get :dashboard, to: "dashboard#index"
 
   namespace :settings do
     inertia :appearance
-    inertia :profile, "profiles#show"
   end
 
   root "home#index"

@@ -67,6 +67,28 @@ clerk:
 4. Copy the secret key to Rails credentials using `rails credentials:edit`
 5. Configure your Clerk application settings (sign-in methods, appearance, etc.)
 
+### Setting Up Clerk Webhooks
+
+This application uses Clerk webhooks to automatically sync user data changes. To set up webhooks:
+
+1. In your Clerk dashboard, go to **Webhooks**
+2. Create a new webhook endpoint with the URL: `https://your-domain.com/webhooks/clerk`
+3. Select the following events:
+   - `user.deleted` - Automatically deletes users from your database when deleted in Clerk
+   - `user.updated` - Clears user cache when profile is updated in Clerk
+4. Copy the webhook signing secret to Rails credentials:
+   ```bash
+   rails credentials:edit
+   ```
+   Add the webhook secret:
+   ```yaml
+   clerk:
+     api_key: "sk_test_your_secret_key_here"
+     webhook_secret: "whsec_your_webhook_secret_here"
+   ```
+
+**Note:** The webhook endpoint automatically handles user deletion from your platform when users delete their accounts through Clerk's user interface, eliminating the need for manual account deletion components.
+
 ### Example .env file
 
 ```bash
