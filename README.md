@@ -41,6 +41,18 @@ clerk:
 
 ### Optional Environment Variables
 
+#### Error Tracking (Sentry)
+- `SENTRY_DSN` - Sentry Data Source Name for backend error tracking
+  - Get this from your [Sentry project settings](https://sentry.io)
+  - Only active in production environment
+  - Required for backend error tracking
+- `VITE_SENTRY_DSN` - Sentry DSN for frontend error tracking
+  - Same DSN as backend, but exposed to frontend via Vite
+  - Only active in production builds (`npm run build`)
+  - Required for frontend error tracking
+- `SENTRY_TRACES_SAMPLE_RATE` - Sample rate for performance monitoring (default: 0.1)
+- `VITE_SENTRY_TRACES_SAMPLE_RATE` - Frontend sample rate for performance monitoring (default: 0.1)
+
 #### Database
 - `DATABASE_URL` - PostgreSQL connection string (production)
 - Default: SQLite in development
@@ -84,11 +96,36 @@ This application uses Clerk webhooks to automatically sync user data changes. To
 
 **Note:** The webhook endpoint automatically handles user deletion from your platform when users delete their accounts through Clerk's user interface, eliminating the need for manual account deletion components.
 
+### Setting Up Sentry Error Tracking
+
+This application includes integrated error tracking with Sentry for both backend and frontend.
+
+**Important:** Sentry is only enabled in production to avoid noise during development.
+
+1. Create a [Sentry account](https://sentry.io) and create a new project
+2. Copy your project's DSN from the project settings
+3. Set the following environment variables:
+   - `SENTRY_DSN` - For backend error tracking
+   - `VITE_SENTRY_DSN` - For frontend error tracking (same value as above)
+4. Optional: Configure sample rates:
+   - `SENTRY_TRACES_SAMPLE_RATE` - Backend performance monitoring (default: 0.1)
+   - `VITE_SENTRY_TRACES_SAMPLE_RATE` - Frontend performance monitoring (default: 0.1)
+
+Sentry will automatically:
+- Track errors and exceptions in both Rails and React
+- Monitor performance and capture traces
+- Provide session replay for frontend errors
+- Tag releases with Git commit hash (useful for Heroku deployments)
+
 ### Example .env file
 
 ```bash
 # Clerk Configuration
 VITE_CLERK_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
+
+# Sentry Error Tracking (Production only)
+# SENTRY_DSN=https://your-dsn@o123456.ingest.sentry.io/123456
+# VITE_SENTRY_DSN=https://your-dsn@o123456.ingest.sentry.io/123456
 
 # Optional: Database (defaults to SQLite in development)
 # DATABASE_URL=postgresql://user:password@localhost/myapp_development

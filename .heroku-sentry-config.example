@@ -1,0 +1,16 @@
+# Heroku Environment Variables for Sentry Error Tracking
+
+# To enable Sentry error tracking on Heroku, set these environment variables:
+
+heroku config:set SENTRY_DSN="https://your-dsn@o123456.ingest.sentry.io/123456"
+heroku config:set VITE_SENTRY_DSN="https://your-dsn@o123456.ingest.sentry.io/123456"
+
+# Optional: Configure sample rates (defaults to 0.1 for both)
+heroku config:set SENTRY_TRACES_SAMPLE_RATE="0.1"
+heroku config:set VITE_SENTRY_TRACES_SAMPLE_RATE="0.1"
+
+# Sentry will automatically use HEROKU_SLUG_COMMIT for release tracking
+# This is provided by Heroku automatically for Dyno Metadata
+
+# Note: Sentry is only active in production environment
+# Development and test environments will not initialize Sentry

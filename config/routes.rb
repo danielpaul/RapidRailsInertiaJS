@@ -13,6 +13,13 @@ Rails.application.routes.draw do
     inertia :appearance
   end
 
+  # Sentry testing routes (only available in non-production)
+  unless Rails.env.production?
+    get "sentry_test/backend_error", to: "sentry_test#test_backend_error"
+    get "sentry_test/frontend_error", to: "sentry_test#test_frontend_error"
+    get "sentry_test/performance", to: "sentry_test#test_performance"
+  end
+
   root "home#index"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
