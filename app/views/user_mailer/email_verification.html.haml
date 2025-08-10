@@ -1,0 +1,19 @@
+= render "shared/email_components/header", title: "Verify Your Email", subtitle: "Secure your account with email verification"
+
+.email-body
+  %p.email-text Hey there,
+
+  %p.email-text
+    This is to confirm that 
+    %strong= @user.email
+    is the email you want to use on your account. If you ever lose your password, that's where we'll email a reset link.
+
+  %p.email-text
+    %strong You must hit the link below to confirm that you received this email.
+
+  .text-center
+    = render "shared/email_components/button", text: "Yes, use this email for my account", url: identity_email_verification_url(sid: @signed_id)
+
+  %hr.email-divider
+
+= render "shared/email_components/footer", unsubscribe_url: nil

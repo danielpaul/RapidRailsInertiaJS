@@ -1,0 +1,11 @@
+!!! 5
+%html
+  %head
+    %meta{"http-equiv" => "Content-Type", content: "text/html; charset=utf-8"}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
+    %meta{name: "x-apple-disable-message-reformatting"}
+    %title= @email_title || "Email from #{Rails.application.class.module_parent_name}"
+    = stylesheet_link_tag "email", "data-turbo-track": "reload"
+  %body
+    .email-container
+      = yield

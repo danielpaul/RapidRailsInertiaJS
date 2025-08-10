@@ -1,0 +1,9 @@
+-# Footer component with support information and unsubscribe
+.email-footer
+  %p.email-text-small 
+    Have questions or need help? Just reply to this email and our support team will help you sort it out.
+  - if unsubscribe_url.present?
+    %p.email-text-small
+      = link_to "Unsubscribe", unsubscribe_url, style: "color: #6b7280;"
+  %p.email-text-small
+    &copy; #{Date.current.year} #{Rails.application.class.module_parent_name}. All rights reserved.
