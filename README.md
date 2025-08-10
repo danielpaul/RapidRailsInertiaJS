@@ -27,8 +27,9 @@ This starter kit includes [Solid Queue](https://github.com/basecamp/solid_queue)
 
 ### Quick Start
 
-1. **Development (In-Process Jobs)**: Start the server with `bin/dev` - jobs run within the same process as your web server for simplicity
-2. **Production**: Jobs automatically run in separate processes using the database-backed queue
+1. **Setup**: After running `bin/setup`, solid_queue tables are automatically created
+2. **Development (In-Process Jobs)**: Start the server with `bin/dev` - jobs run within the same process as your web server for simplicity
+3. **Production**: Jobs automatically run in separate processes using the database-backed queue
 
 ### Usage Example
 
@@ -40,13 +41,41 @@ WelcomeEmailJob.perform_later("user@example.com", "John Doe")
 WelcomeEmailJob.perform_now("user@example.com", "John Doe")
 ```
 
-### Setup Script
+### Configuration Options
+
+**Development Environment:**
+- Jobs run in-process with the web server when using `bin/dev`
+- Set `SOLID_QUEUE_IN_PUMA=1` in your environment for in-process execution
+- Verbose job logging is enabled for development visibility
+
+**Production Environment:**
+- Jobs run in dedicated worker processes
+- Use `bin/jobs` to start worker processes separately
+- Configured to use the same database connection as your main app
+
+### Setup Verification
 
 Run the setup script to verify your Solid Queue configuration:
 
 ```bash
 bin/setup-solid-queue
 ```
+
+### Troubleshooting
+
+**Database Connection Issues:**
+- Ensure PostgreSQL is running: `sudo service postgresql start`
+- Create database if needed: `bin/rails db:create`
+- Run setup: `bin/rails db:setup`
+
+**Docker/Production:**
+- Set `DATABASE_USERNAME` and `DATABASE_PASSWORD` environment variables
+- Ensure database user has CREATE and CONNECT privileges
+
+**Job Processing:**
+- For development: Use `bin/dev` for in-process job execution
+- For separate workers: Use `bin/jobs` in a separate terminal
+- Monitor jobs: Check `SolidQueue::Job.count` in Rails console
 
 ### Job Processing Options
 

@@ -25,10 +25,13 @@ begin
   ActiveRecord::Base.connection.execute("SELECT 1")
   say "Database connection successful"
   
-  # Create queue tables if they don't exist
+  # Check if solid_queue tables exist, create them if they don't
   unless ActiveRecord::Base.connection.table_exists?("solid_queue_jobs")
     say "Creating solid_queue tables..."
-    ActiveRecord::Base.connection.execute(File.read(Rails.root.join("db/queue_schema.rb")))
+    
+    # Use proper Rails command to setup solid_queue tables
+    system("bin/rails db:setup:all") or raise "Failed to setup databases"
+    
     say "Solid Queue tables created successfully"
   else
     say "Solid Queue tables already exist"
@@ -37,19 +40,32 @@ begin
 rescue ActiveRecord::ConnectionNotEstablished => e
   say_error "Cannot connect to database. Please ensure your database is running and configured properly."
   say_error "Error: #{e.message}"
+  say ""
   say "To fix this, you may need to:"
   say "1. Start your PostgreSQL server"
-  say "2. Create the development database: createdb inertia_rails_shadcn_starter_development"
-  say "3. Run: rails db:create db:migrate"
+  say "2. Create the development database: bin/rails db:create"
+  say "3. Run database setup: bin/rails db:setup"
+  say ""
+  say "For Docker environments, ensure DATABASE_USERNAME and DATABASE_PASSWORD are set correctly."
   exit 1
 rescue => e
   say_error "Unexpected error: #{e.message}"
+  say ""
+  say "If you're having trouble, try:"
+  say "1. Run: bin/rails db:create db:setup"
+  say "2. Ensure your database user has proper permissions"
   exit 1
 end
 
 # Test job enqueueing and processing
 begin
   say "Testing job enqueueing..."
+  
+  # Ensure solid_queue is configured as the job adapter
+  unless Rails.application.config.active_job.queue_adapter == :solid_queue
+    say_warning "Active Job queue adapter is not set to solid_queue"
+    say "Current adapter: #{Rails.application.config.active_job.queue_adapter}"
+  end
   
   # Enqueue a test job
   WelcomeEmailJob.perform_later("test@example.com", "Test User")
@@ -61,6 +77,11 @@ begin
   
 rescue => e
   say_error "Failed to enqueue test job: #{e.message}"
+  say ""
+  say "This might be because:"
+  say "1. Solid Queue tables are not properly set up"
+  say "2. Database connection issues"
+  say "3. Missing solid_queue configuration"
 end
 
 say "✅ Solid Queue setup complete!"
@@ -73,3 +94,5 @@ say "  bin/jobs"
 say ""
 say "Example usage in Rails console:"
 say "  WelcomeEmailJob.perform_later('user@example.com', 'User Name')"
+say ""
+say "For production deployment, ensure you have dedicated worker processes."
