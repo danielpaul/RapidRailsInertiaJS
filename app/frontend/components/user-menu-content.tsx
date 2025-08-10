@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { UserInfo } from "@/components/user-info"
 import { useMobileNavigation } from "@/hooks/use-mobile-navigation"
-import { sessionPath, settingsProfilePath } from "@/routes"
+import { settingsProfilePath } from "@/routes"
 import type { User } from "@/types"
 
 interface UserMenuContentProps {
@@ -29,16 +29,10 @@ export function UserMenuContent({ auth }: UserMenuContentProps) {
 
   const handleLogout = async () => {
     cleanup()
+
     // Sign out from Clerk
     await signOut()
-    // Clear local session if it exists
-    if (auth.session) {
-      router.delete(sessionPath({ id: auth.session.id }), {
-        onFinish: () => router.visit('/'),
-      })
-    } else {
-      router.visit('/')
-    }
+    router.visit('/')
   }
 
   return (

@@ -18,10 +18,7 @@ module Authenticatable
   def current_user
     return @current_user if defined?(@current_user)
 
-    if Rails.env.test?
-      # Test environment: mock user if needed
-      @current_user = User.new(id: 1, clerk_id: "test_user") if session[:clerk_token] == "test_token"
-    elsif session[:clerk_token].present? && (user_id = clerk.user_id)
+    if clerk && (user_id = clerk.user_id)
       @current_user = User.find_or_create_by(clerk_id: user_id)
     else
       @current_user = nil
