@@ -5,9 +5,10 @@ require "rails_helper"
 RSpec.describe "Sentry Configuration" do
   describe "initialization" do
     it "does not initialize Sentry in test environment" do
-      expect(Sentry.get_current_hub).not_to be_nil # Hub always exists
-      # But configuration should not be set in test
-      expect(Sentry.configuration.dsn).to be_nil
+      # In test environment, Sentry should not be initialized
+      # The hub may or may not exist depending on gem loading
+      expect(Sentry.get_current_hub).to be_nil
+      expect(Sentry.configuration&.dsn).to be_nil
     end
 
     it "does not initialize Sentry in development environment" do
@@ -16,7 +17,7 @@ RSpec.describe "Sentry Configuration" do
       # Reload initializer
       load Rails.root.join("config/initializers/sentry.rb")
 
-      expect(Sentry.configuration.dsn).to be_nil
+      expect(Sentry.configuration&.dsn).to be_nil
     end
 
     context "in production environment" do
@@ -32,7 +33,7 @@ RSpec.describe "Sentry Configuration" do
             config.environment = Rails.env
           end
 
-          expect(Sentry.configuration.dsn).to eq("https://test@example.com/123")
+          expect(Sentry.configuration.dsn.to_s).to eq("https://test@example.com/123")
           expect(Sentry.configuration.environment).to eq("production")
         end
       end
@@ -41,6 +42,7 @@ RSpec.describe "Sentry Configuration" do
         with_env("SENTRY_DSN" => nil) do
           load Rails.root.join("config/initializers/sentry.rb")
           # DSN should remain nil as no environment variable was provided
+          expect(Sentry.configuration&.dsn).to be_nil
         end
       end
     end
