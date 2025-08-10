@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "fileutils"
+
+def say(message)
+  puts "\e[32m#{message}\e[0m"
+end
+
+def say_warning(message)
+  puts "\e[33mWarning: #{message}\e[0m"
+end
+
+def say_error(message)
+  puts "\e[31mError: #{message}\e[0m"
+end
+
+say "Setting up Solid Queue for development..."
+
+# Check if database exists and is accessible
+begin
+  require_relative "../config/environment"
+  
+  # Try to connect to the database
+  ActiveRecord::Base.connection.execute("SELECT 1")
+  say "Database connection successful"
+  
+  # Create queue tables if they don't exist
+  unless ActiveRecord::Base.connection.table_exists?("solid_queue_jobs")
+    say "Creating solid_queue tables..."
+    ActiveRecord::Base.connection.execute(File.read(Rails.root.join("db/queue_schema.rb")))
+    say "Solid Queue tables created successfully"
+  else
+    say "Solid Queue tables already exist"
+  end
+  
+rescue ActiveRecord::ConnectionNotEstablished => e
+  say_error "Cannot connect to database. Please ensure your database is running and configured properly."
+  say_error "Error: #{e.message}"
+  say "To fix this, you may need to:"
+  say "1. Start your PostgreSQL server"
+  say "2. Create the development database: createdb inertia_rails_shadcn_starter_development"
+  say "3. Run: rails db:create db:migrate"
+  exit 1
+rescue => e
+  say_error "Unexpected error: #{e.message}"
+  exit 1
+end
+
+# Test job enqueueing and processing
+begin
+  say "Testing job enqueueing..."
+  
+  # Enqueue a test job
+  WelcomeEmailJob.perform_later("test@example.com", "Test User")
+  say "Job enqueued successfully"
+  
+  # Check if jobs are in the queue
+  job_count = SolidQueue::Job.count
+  say "#{job_count} job(s) in queue"
+  
+rescue => e
+  say_error "Failed to enqueue test job: #{e.message}"
+end
+
+say "✅ Solid Queue setup complete!"
+say ""
+say "To start the development server with in-process job processing:"
+say "  bin/dev"
+say ""
+say "To start a separate job worker (alternative):"
+say "  bin/jobs"
+say ""
+say "Example usage in Rails console:"
+say "  WelcomeEmailJob.perform_later('user@example.com', 'User Name')"

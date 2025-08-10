@@ -7,6 +7,7 @@ A modern full-stack starter application with Rails backend and React frontend us
 - [Inertia Rails](https://inertia-rails.dev) & [Vite Rails](https://vite-ruby.netlify.app) setup
 - [React](https://react.dev) frontend with TypeScript & [shadcn/ui](https://ui.shadcn.com) component library
 - [Clerk](https://clerk.com) User authentication system
+- [Solid Queue](https://github.com/basecamp/solid_queue) for background job processing with in-process execution in development
 - [Kamal](https://kamal-deploy.org/) for deployment
 - Optional SSR support
 
@@ -19,6 +20,45 @@ A modern full-stack starter application with Rails backend and React frontend us
    bin/setup
    ```
 4. Open http://localhost:3000
+
+## Background Jobs with Solid Queue
+
+This starter kit includes [Solid Queue](https://github.com/basecamp/solid_queue) for reliable, database-backed background job processing. The setup is streamlined for development with in-process job execution.
+
+### Quick Start
+
+1. **Development (In-Process Jobs)**: Start the server with `bin/dev` - jobs run within the same process as your web server for simplicity
+2. **Production**: Jobs automatically run in separate processes using the database-backed queue
+
+### Usage Example
+
+```ruby
+# Enqueue a background job
+WelcomeEmailJob.perform_later("user@example.com", "John Doe")
+
+# Or perform immediately
+WelcomeEmailJob.perform_now("user@example.com", "John Doe")
+```
+
+### Setup Script
+
+Run the setup script to verify your Solid Queue configuration:
+
+```bash
+bin/setup-solid-queue
+```
+
+### Job Processing Options
+
+- **Development (Recommended)**: Use `bin/dev` - enables `SOLID_QUEUE_IN_PUMA=1` for in-process job execution
+- **Development (Alternative)**: Use `bin/rails server` + `bin/jobs` in separate terminals
+- **Production**: Jobs are processed by separate worker processes automatically
+
+### Configuration
+
+- Development: Jobs run in-process with your web server (via Puma plugin)
+- Production: Uses separate database-backed queue processes
+- All environments use PostgreSQL for queue storage
 
 ## Environment Variables
 
