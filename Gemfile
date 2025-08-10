@@ -6,8 +6,8 @@ source "https://rubygems.org"
 gem "rails", "~> 8.0.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
-# Use sqlite3 as the database for Active Record
-gem "sqlite3", ">= 2.1"
+# Use PostgreSQL as the database for Active Record
+gem "pg", ">= 1.6"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
@@ -42,9 +42,11 @@ gem "vite_rails", "~> 3.0"
 # The Rails adapter for Inertia.js [https://inertia-rails.dev]
 gem "inertia_rails", "~> 3.6"
 
-# An authentication system generator for Rails applications
-# we leave gem here to watch for security updates
-gem "authentication-zero"
+# Clerk SDK for authentication
+gem "clerk-sdk-ruby", require: "clerk"
+
+# Generate short unique IDs from integers with Rails integration
+gem "hashid-rails", "~> 1.0"
 
 # Brings Rails named routes to javascript
 gem "js-routes"

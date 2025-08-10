@@ -221,7 +221,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end">
-                <UserMenuContent auth={auth} />
+                {auth.user && <UserMenuContent auth={{...auth, user: auth.user}} />}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

@@ -1,5 +1,6 @@
 import { Link, router } from "@inertiajs/react"
-import { LogOut, Settings } from "lucide-react"
+import { LogOut, Settings, User as UserIcon, Shuffle } from "lucide-react"
+import { useClerk } from "@clerk/clerk-react"
 
 import {
   DropdownMenuGroup,
@@ -9,25 +10,34 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { UserInfo } from "@/components/user-info"
 import { useMobileNavigation } from "@/hooks/use-mobile-navigation"
-import { sessionPath, settingsProfilePath } from "@/routes"
+import { settingsAppearancePath, switchAccountPath } from "@/routes"
 import type { User } from "@/types"
 
 interface UserMenuContentProps {
   auth: {
-    session: {
+    session?: {
       id: string
     }
-    user: User
+    user: User // Now required since we check for null in parent
   }
 }
 
 export function UserMenuContent({ auth }: UserMenuContentProps) {
-  const { session, user } = auth
+  const { user } = auth
   const cleanup = useMobileNavigation()
+  const { signOut, openUserProfile } = useClerk()
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     cleanup()
-    router.flushAll()
+
+    // Sign out from Clerk
+    await signOut()
+    router.visit('/')
+  }
+
+  const handleProfile = () => {
+    cleanup()
+    openUserProfile()
   }
 
   return (
@@ -39,10 +49,14 @@ export function UserMenuContent({ auth }: UserMenuContentProps) {
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
+        <DropdownMenuItem onClick={handleProfile}>
+          <UserIcon className="mr-2" />
+          Profile
+        </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link
             className="block w-full"
-            href={settingsProfilePath()}
+            href={settingsAppearancePath()}
             as="button"
             prefetch
             onClick={cleanup}
@@ -56,14 +70,19 @@ export function UserMenuContent({ auth }: UserMenuContentProps) {
       <DropdownMenuItem asChild>
         <Link
           className="block w-full"
-          method="delete"
-          href={sessionPath({ id: session.id })}
+          href={switchAccountPath()}
           as="button"
-          onClick={handleLogout}
+          prefetch
+          onClick={cleanup}
         >
-          <LogOut className="mr-2" />
-          Log out
+          <Shuffle className="mr-2" />
+          Switch Account
         </Link>
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem onClick={handleLogout}>
+        <LogOut className="mr-2" />
+        Log out
       </DropdownMenuItem>
     </>
   )

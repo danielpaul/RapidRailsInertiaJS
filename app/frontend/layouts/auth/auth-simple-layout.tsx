@@ -27,15 +27,19 @@ export default function AuthSimpleLayout({
               <div className="mb-1 flex size-14 items-center justify-center rounded-md">
                 <AppLogoIcon className="size-14 fill-current text-[var(--foreground)] dark:text-white" />
               </div>
-              <span className="sr-only">{title}</span>
+              {title && <span className="sr-only">{title}</span>}
             </Link>
 
-            <div className="space-y-2 text-center">
-              <h1 className="text-xl font-medium">{title}</h1>
-              <p className="text-muted-foreground text-center text-sm">
-                {description}
-              </p>
-            </div>
+            {(title || description) && (
+              <div className="space-y-2 text-center">
+                {title && <h1 className="text-xl font-medium">{title}</h1>}
+                {description && (
+                  <p className="text-muted-foreground text-center text-sm">
+                    {description}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
           {children}
         </div>
