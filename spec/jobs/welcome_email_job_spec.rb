@@ -4,16 +4,24 @@ require "rails_helper"
 
 RSpec.describe WelcomeEmailJob, type: :job do
   describe "#perform" do
-    it "logs welcome email processing and returns result" do
-      user_email = "test@example.com"
-      user_name = "Test User"
-      
-      # Create an instance to test the logic directly
+    let(:user_email) { "test@example.com" }
+    let(:user_name) { "Test User" }
+    let(:mailer_double) { instance_double(ActionMailer::MessageDelivery) }
+    
+    before do
+      allow(UserMailer).to receive(:welcome_email).and_return(mailer_double)
+      allow(mailer_double).to receive(:deliver_now)
+    end
+
+    it "sends welcome email and returns result" do
       job = described_class.new
       
-      expect(Rails.logger).to receive(:info).with("📧 Sending welcome email to #{user_email}")
-      expect(Rails.logger).to receive(:info).with("👤 User name: #{user_name}")
-      expect(Rails.logger).to receive(:info).with("✅ Welcome email sent successfully to #{user_email}")
+      expect(Rails.logger).to receive(:info).with("Sending welcome email to #{user_email}")
+      expect(Rails.logger).to receive(:info).with("User name: #{user_name}")
+      expect(Rails.logger).to receive(:info).with("Welcome email sent successfully to #{user_email}")
+      
+      expect(UserMailer).to receive(:welcome_email).with(user_email, user_name).and_return(mailer_double)
+      expect(mailer_double).to receive(:deliver_now)
       
       result = job.perform(user_email, user_name)
       
@@ -26,13 +34,13 @@ RSpec.describe WelcomeEmailJob, type: :job do
     end
 
     it "handles missing user name gracefully" do
-      user_email = "test@example.com"
-      
-      # Create an instance to test the logic directly
       job = described_class.new
       
-      expect(Rails.logger).to receive(:info).with("📧 Sending welcome email to #{user_email}")
-      expect(Rails.logger).to receive(:info).with("✅ Welcome email sent successfully to #{user_email}")
+      expect(Rails.logger).to receive(:info).with("Sending welcome email to #{user_email}")
+      expect(Rails.logger).to receive(:info).with("Welcome email sent successfully to #{user_email}")
+      
+      expect(UserMailer).to receive(:welcome_email).with(user_email, nil).and_return(mailer_double)
+      expect(mailer_double).to receive(:deliver_now)
       
       result = job.perform(user_email)
       
