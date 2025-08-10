@@ -1,5 +1,5 @@
 import { Link, router } from "@inertiajs/react"
-import { LogOut, Settings, User as UserIcon } from "lucide-react"
+import { LogOut, Settings, User as UserIcon, Shuffle } from "lucide-react"
 import { useClerk } from "@clerk/clerk-react"
 
 import {
@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { UserInfo } from "@/components/user-info"
 import { useMobileNavigation } from "@/hooks/use-mobile-navigation"
-import { settingsAppearancePath } from "@/routes"
+import { settingsAppearancePath, switchAccountPath } from "@/routes"
 import type { User } from "@/types"
 
 interface UserMenuContentProps {
@@ -66,6 +66,19 @@ export function UserMenuContent({ auth }: UserMenuContentProps) {
           </Link>
         </DropdownMenuItem>
       </DropdownMenuGroup>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem asChild>
+        <Link
+          className="block w-full"
+          href={switchAccountPath()}
+          as="button"
+          prefetch
+          onClick={cleanup}
+        >
+          <Shuffle className="mr-2" />
+          Switch Account
+        </Link>
+      </DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem onClick={handleLogout}>
         <LogOut className="mr-2" />
