@@ -6,14 +6,9 @@ A modern full-stack starter application with Rails backend and React frontend us
 
 - [Inertia Rails](https://inertia-rails.dev) & [Vite Rails](https://vite-ruby.netlify.app) setup
 - [React](https://react.dev) frontend with TypeScript & [shadcn/ui](https://ui.shadcn.com) component library
-- User authentication system using [Clerk](https://clerk.com)
+- [Clerk](https://clerk.com) User authentication system
 - [Kamal](https://kamal-deploy.org/) for deployment
 - Optional SSR support
-
-
-<a href="https://evilmartians.com/?utm_source=inertia-rails-shadcn-starter&utm_campaign=project_page">
-<img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Built by Evil Martians" width="236" height="54">
-</a>
 
 ## Setup
 
