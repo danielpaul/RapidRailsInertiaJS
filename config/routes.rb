@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get "examples/welcome_email"
-  post "examples/enqueue_welcome_email"
   get  "sign_in", to: "sessions#new", as: :sign_in
   get  "switch", to: "sessions#switch", as: :switch_account
 
