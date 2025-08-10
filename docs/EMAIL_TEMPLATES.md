@@ -10,6 +10,27 @@ This project uses a modernized email template system with the following features
 - **Automated CSS Inlining**: CSS is automatically inlined for better email client compatibility
 - **Responsive Design**: Mobile-friendly email layouts
 
+## Migration from ERB
+
+The old ERB templates have been replaced with HAML templates that provide:
+- Better readability and maintainability
+- Component-based architecture
+- Consistent styling with Tailwind CSS
+- Automated CSS inlining for email client compatibility
+
+## Installation
+
+After cloning, install the required gems:
+
+```bash
+bundle install
+```
+
+The system will automatically:
+- Configure Premailer for CSS inlining
+- Set up HAML template engine
+- Include email stylesheets in asset pipeline
+
 ## Components
 
 ### Header Component
@@ -77,3 +98,14 @@ To preview emails in development:
 
 = email_footer
 ```
+
+## Testing
+
+To test email rendering:
+
+```ruby
+# In Rails console
+UserMailer.with(user: User.first).email_verification.deliver_now
+```
+
+This will open the email in your browser (in development) showing the styled template with inlined CSS.
