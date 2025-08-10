@@ -117,6 +117,21 @@ Sentry will automatically:
 - Provide session replay for frontend errors
 - Tag releases with Git commit hash (useful for Heroku deployments)
 
+#### Heroku Deployment with Sentry
+
+For Heroku deployments, you'll need to enable the Heroku Labs runtime-dyno-metadata feature to automatically track Git commit information with your Sentry releases:
+
+```bash
+# Enable the runtime-dyno-metadata lab feature
+heroku labs:enable runtime-dyno-metadata -a your-app-name
+
+# Set your Sentry DSN environment variables
+heroku config:set SENTRY_DSN="https://your-dsn@o123456.ingest.sentry.io/123456" -a your-app-name
+heroku config:set VITE_SENTRY_DSN="https://your-dsn@o123456.ingest.sentry.io/123456" -a your-app-name
+```
+
+This feature provides the `HEROKU_SLUG_COMMIT` environment variable that Sentry uses to automatically tag releases with the deployed Git commit hash, making it easier to track which version of your code is running and correlate errors with specific deployments.
+
 ### Example .env file
 
 ```bash
