@@ -11,16 +11,16 @@ RSpec.describe "Authentication", type: :request do
     context "with valid Clerk session" do
       before do
         cookies[:__session] = clerk_session_token
-        
+
         # Mock Clerk SDK to return valid session
         allow_any_instance_of(Clerk::SDK).to receive(:verify_token).and_return(
-          { "sub" => clerk_user_id }
+          {"sub" => clerk_user_id}
         )
-        
+
         # Mock the clerk proxy that would be set by middleware
         allow_any_instance_of(ApplicationController).to receive(:clerk).and_return(
-          double("clerk_proxy", 
-            user?: true, 
+          double("clerk_proxy",
+            user?: true,
             user_id: clerk_user_id,
             organization_id: nil
           )
@@ -30,7 +30,7 @@ RSpec.describe "Authentication", type: :request do
       it "returns the current user" do
         get dashboard_url
         expect(response).to have_http_status(:success)
-        
+
         # The user should be accessible in the controller
         user = User.find_by(clerk_id: clerk_user_id)
         expect(user).to be_present
@@ -44,7 +44,7 @@ RSpec.describe "Authentication", type: :request do
 
       it "finds existing user if it exists" do
         user # Create the user first
-        
+
         expect {
           get dashboard_url
         }.not_to change(User, :count)
@@ -61,11 +61,11 @@ RSpec.describe "Authentication", type: :request do
     context "with invalid Clerk session" do
       before do
         cookies[:__session] = "invalid_token"
-        
+
         # Mock the clerk proxy to return nil (no authenticated user)
         allow_any_instance_of(ApplicationController).to receive(:clerk).and_return(
-          double("clerk_proxy", 
-            user?: false, 
+          double("clerk_proxy",
+            user?: false,
             user_id: nil,
             organization_id: nil
           )
@@ -83,11 +83,11 @@ RSpec.describe "Authentication", type: :request do
     context "when user is authenticated" do
       before do
         cookies[:__session] = clerk_session_token
-        
+
         # Mock the clerk proxy that would be set by middleware
         allow_any_instance_of(ApplicationController).to receive(:clerk).and_return(
-          double("clerk_proxy", 
-            user?: true, 
+          double("clerk_proxy",
+            user?: true,
             user_id: clerk_user_id,
             organization_id: nil
           )
@@ -119,11 +119,11 @@ RSpec.describe "Authentication", type: :request do
     context "when user is authenticated" do
       before do
         cookies[:__session] = clerk_session_token
-        
+
         # Mock the clerk proxy that would be set by middleware
         allow_any_instance_of(ApplicationController).to receive(:clerk).and_return(
-          double("clerk_proxy", 
-            user?: true, 
+          double("clerk_proxy",
+            user?: true,
             user_id: clerk_user_id,
             organization_id: nil
           )
@@ -146,13 +146,13 @@ RSpec.describe "Authentication", type: :request do
       it "processes the session cookie" do
         # Mock the clerk proxy that would be set by middleware
         allow_any_instance_of(ApplicationController).to receive(:clerk).and_return(
-          double("clerk_proxy", 
-            user?: true, 
+          double("clerk_proxy",
+            user?: true,
             user_id: clerk_user_id,
             organization_id: nil
           )
         )
-        
+
         get dashboard_url
         expect(response).to have_http_status(:success)
       end
@@ -186,13 +186,13 @@ RSpec.describe "Authentication", type: :request do
       it "handles network errors gracefully" do
         # Mock the clerk proxy to simulate no authentication due to error
         allow_any_instance_of(ApplicationController).to receive(:clerk).and_return(
-          double("clerk_proxy", 
-            user?: false, 
+          double("clerk_proxy",
+            user?: false,
             user_id: nil,
             organization_id: nil
           )
         )
-        
+
         get dashboard_url
         expect(response).to redirect_to(sign_in_url)
       end
@@ -200,13 +200,13 @@ RSpec.describe "Authentication", type: :request do
       it "handles server errors gracefully" do
         # Mock the clerk proxy to simulate no authentication due to error
         allow_any_instance_of(ApplicationController).to receive(:clerk).and_return(
-          double("clerk_proxy", 
-            user?: false, 
+          double("clerk_proxy",
+            user?: false,
             user_id: nil,
             organization_id: nil
           )
         )
-        
+
         get dashboard_url
         expect(response).to redirect_to(sign_in_url)
       end
@@ -216,11 +216,11 @@ RSpec.describe "Authentication", type: :request do
   describe "session persistence" do
     before do
       cookies[:__session] = clerk_session_token
-      
+
       # Mock the clerk proxy that would be set by middleware
       allow_any_instance_of(ApplicationController).to receive(:clerk).and_return(
-        double("clerk_proxy", 
-          user?: true, 
+        double("clerk_proxy",
+          user?: true,
           user_id: clerk_user_id,
           organization_id: nil
         )
@@ -231,7 +231,7 @@ RSpec.describe "Authentication", type: :request do
       # First request
       get dashboard_url
       expect(response).to have_http_status(:success)
-      
+
       # Second request should still be authenticated
       get dashboard_url
       expect(response).to have_http_status(:success)

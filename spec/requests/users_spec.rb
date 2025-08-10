@@ -23,10 +23,10 @@ RSpec.describe "Webhooks", type: :request do
       it "deletes the user from our database" do
         user_id = user.id
         clerk_id = user.clerk_id
-        
+
         post webhooks_clerk_url, params: {
           type: "user.deleted",
-          data: { id: clerk_id }
+          data: {id: clerk_id}
         }
 
         expect(response).to have_http_status(:ok)
@@ -35,10 +35,10 @@ RSpec.describe "Webhooks", type: :request do
 
       it "logs when user is not found" do
         expect(Rails.logger).to receive(:warn).with("User with clerk_id invalid_id not found for deletion")
-        
+
         post webhooks_clerk_url, params: {
           type: "user.deleted",
-          data: { id: "invalid_id" }
+          data: {id: "invalid_id"}
         }
 
         expect(response).to have_http_status(:ok)
@@ -48,10 +48,10 @@ RSpec.describe "Webhooks", type: :request do
     context "when user.updated event is received" do
       it "clears the user cache" do
         expect(Rails.cache).to receive(:delete).with("clerk_user/#{user.clerk_id}")
-        
+
         post webhooks_clerk_url, params: {
           type: "user.updated",
-          data: { id: user.clerk_id }
+          data: {id: user.clerk_id}
         }
 
         expect(response).to have_http_status(:ok)

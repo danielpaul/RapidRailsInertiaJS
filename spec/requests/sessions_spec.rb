@@ -50,11 +50,11 @@ RSpec.describe "Sessions", type: :request do
       before do
         # Set up the __session cookie that Clerk would provide
         cookies[:__session] = clerk_session_token
-        
+
         # Mock the clerk proxy that would be set by middleware
         allow_any_instance_of(ApplicationController).to receive(:clerk).and_return(
-          double("clerk_proxy", 
-            user?: true, 
+          double("clerk_proxy",
+            user?: true,
             user_id: clerk_user_id,
             organization_id: nil
           )
@@ -68,7 +68,7 @@ RSpec.describe "Sessions", type: :request do
         }.to change(User, :count).by(1)
 
         expect(response).to have_http_status(:success)
-        
+
         # Verify the user was created with the correct clerk_id
         user = User.find_by(clerk_id: clerk_user_id)
         expect(user).to be_present
@@ -77,7 +77,7 @@ RSpec.describe "Sessions", type: :request do
       it "finds existing user on subsequent requests" do
         # Create user first
         existing_user = create(:user, clerk_id: clerk_user_id)
-        
+
         # Second request should find existing user
         expect {
           get dashboard_url
@@ -103,11 +103,11 @@ RSpec.describe "Sessions", type: :request do
     context "with invalid __session cookie" do
       before do
         cookies[:__session] = "invalid_session_token"
-        
+
         # Mock the clerk proxy to return no authenticated user
         allow_any_instance_of(ApplicationController).to receive(:clerk).and_return(
-          double("clerk_proxy", 
-            user?: false, 
+          double("clerk_proxy",
+            user?: false,
             user_id: nil,
             organization_id: nil
           )
@@ -129,11 +129,11 @@ RSpec.describe "Sessions", type: :request do
     context "with expired __session cookie" do
       before do
         cookies[:__session] = "expired_session_token"
-        
+
         # Mock the clerk proxy to return no authenticated user
         allow_any_instance_of(ApplicationController).to receive(:clerk).and_return(
-          double("clerk_proxy", 
-            user?: false, 
+          double("clerk_proxy",
+            user?: false,
             user_id: nil,
             organization_id: nil
           )

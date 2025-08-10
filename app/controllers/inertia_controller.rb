@@ -2,11 +2,11 @@
 
 class InertiaController < ApplicationController
   before_action :authenticate_user!
-  
+
   inertia_config default_render: true
   inertia_share flash: -> { flash.to_hash },
       auth: {
-        user: -> { 
+        user: -> {
           return nil unless current_user
           {
             id: current_user.hashid,

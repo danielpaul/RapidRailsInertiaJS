@@ -6,7 +6,7 @@ class WebhooksController < ApplicationController
 
   def clerk
     event_type = params[:type]
-    
+
     case event_type
     when "user.deleted"
       handle_user_deleted(params[:data])
@@ -24,7 +24,7 @@ class WebhooksController < ApplicationController
   def handle_user_deleted(data)
     # Clerk webhook payload structure: data contains the user object
     clerk_user_id = data[:id] || data["id"]
-    
+
     user = User.find_by(clerk_id: clerk_user_id)
     if user
       Rails.logger.info("Deleting user #{user.id} due to Clerk user deletion")
@@ -36,7 +36,7 @@ class WebhooksController < ApplicationController
 
   def handle_user_updated(data)
     clerk_user_id = data[:id]
-    
+
     user = User.find_by(clerk_id: clerk_user_id)
     if user
       # Clear the cached Clerk user data so it gets refreshed on next access
@@ -48,14 +48,14 @@ class WebhooksController < ApplicationController
   def verify_webhook_signature
     # Get the webhook secret from credentials or environment
     webhook_secret = Rails.application.credentials.dig(:clerk, :webhook_secret) || ENV["CLERK_WEBHOOK_SECRET"]
-    
+
     return head :unauthorized unless webhook_secret
 
     # Get the signature from the request headers
     signature = request.headers["svix-signature"]
     timestamp = request.headers["svix-timestamp"]
     id = request.headers["svix-id"]
-    
+
     return head :unauthorized unless signature && timestamp && id
 
     # Verify the webhook signature using Clerk's verification method
@@ -65,7 +65,7 @@ class WebhooksController < ApplicationController
       Rails.logger.info("Webhook received from Clerk: #{id}")
     rescue => e
       Rails.logger.error("Webhook signature verification failed: #{e.message}")
-      return head :unauthorized
+      head :unauthorized
     end
   end
 end

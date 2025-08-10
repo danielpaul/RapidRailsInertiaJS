@@ -15,7 +15,7 @@
 #
 class User < ApplicationRecord
   include Hashid::Rails
-  
+
   validates :clerk_id, presence: true, uniqueness: true
 
   def clerk_user
@@ -31,7 +31,7 @@ class User < ApplicationRecord
   def email
     return "test@example.com" if Rails.env.test?
     return nil unless clerk_user
-    
+
     clerk_user.email_addresses&.find { |email| email.id == clerk_user.primary_email_address_id }&.email_address
   end
 
@@ -39,7 +39,7 @@ class User < ApplicationRecord
 
   def fetch_clerk_user
     return nil if Rails.env.test? # Skip API calls in test
-    
+
     # Cache for longer period since we'll clear cache via webhook when Clerk user is updated
     Rails.cache.fetch("clerk_user/#{clerk_id}", expires_in: 24.hours) do
       Clerk::SDK.new.users.get_user(clerk_id)

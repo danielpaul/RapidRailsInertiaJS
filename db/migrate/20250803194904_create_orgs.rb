@@ -6,7 +6,7 @@ class CreateOrgs < ActiveRecord::Migration[8.0]
       t.string :clerk_org_id, null: false
       t.timestamps
     end
-    
+
     add_index :orgs, :clerk_org_id, unique: true
   end
 end

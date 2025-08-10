@@ -7,7 +7,7 @@ class TransformUsersForClerk < ActiveRecord::Migration[8.0]
     remove_column :users, :email, :string
     remove_column :users, :password_digest, :string
     remove_column :users, :verified, :boolean
-    
+
     # Add clerk_id field
     add_column :users, :clerk_id, :string, null: false
     add_index :users, :clerk_id, unique: true
