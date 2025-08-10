@@ -17,6 +17,8 @@ class User < ApplicationRecord
   include Hashid::Rails
 
   validates :clerk_id, presence: true, uniqueness: true
+  
+  after_create :send_welcome_email
 
   def clerk_user
     @clerk_user ||= fetch_clerk_user
@@ -36,6 +38,10 @@ class User < ApplicationRecord
   end
 
   private
+
+  def send_welcome_email
+    UserMailer.welcome_email(self).deliver_later if email.present?
+  end
 
   def fetch_clerk_user
     return nil if Rails.env.test? # Skip API calls in test

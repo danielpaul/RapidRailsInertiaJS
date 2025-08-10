@@ -1,0 +1,21 @@
+Welcome to <%= @app_name %>!
+
+Hi <%= @user.name.present? ? @user.name : 'there' %>,
+
+We're thrilled to have you join our community! Your account has been successfully created and you're all set to start exploring everything <%= @app_name %> has to offer.
+
+Here's what you can do next:
+
+• Explore your dashboard and customize your profile
+• Connect with other users in our community  
+• Take advantage of our powerful features
+• Reach out to our support team if you need any help
+
+Get started by visiting: <%= ENV.fetch('APP_URL', 'http://localhost:3000') %>/dashboard
+
+Need help getting started? We're here for you!
+Contact our support team: <%= ENV.fetch('SUPPORT_EMAIL', 'support@example.com') %>
+
+---
+This email was sent from <%= @app_name %>
+If you didn't create an account, you can safely ignore this email.
