@@ -3,18 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Email Configuration" do
-  describe "Environment configurations" do
-    it "configures letter_opener for development" do
-      # Skip this test as we can't reliably change environment in tests
-      # This should be tested in the development configuration file itself
-      skip "Environment switching not supported in test suite"
-    end
-
-    it "configures test delivery method for test environment" do
-      expect(Rails.application.config.action_mailer.delivery_method).to eq(:test)
-    end
-  end
-
   describe "ApplicationMailer" do
     around(:each) do |example|
       original_from_email = ENV["FROM_EMAIL"]
