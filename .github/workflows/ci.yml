@@ -111,7 +111,8 @@ jobs:
         env:
           NODE_ENV: test
           RAILS_ENV: test
-          # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/inertia_rails_shadcn_starter_test
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare spec
 
