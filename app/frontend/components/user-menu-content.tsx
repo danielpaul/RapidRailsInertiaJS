@@ -32,7 +32,7 @@ export function UserMenuContent({ auth }: UserMenuContentProps) {
 
     // Sign out from Clerk
     await signOut()
-    router.visit('/')
+    router.visit("/")
   }
 
   const handleProfile = () => {

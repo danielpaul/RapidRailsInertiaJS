@@ -13,22 +13,18 @@ const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 export default function PersistentLayout({ children }: PersistentLayoutProps) {
   useFlash()
-  
+
   const content = (
     <>
       {children}
       <Toaster richColors />
     </>
   )
-  
+
   // Only wrap with ClerkProvider if we have a publishable key
   if (clerkPubKey) {
-    return (
-      <ClerkProvider publishableKey={clerkPubKey}>
-        {content}
-      </ClerkProvider>
-    )
+    return <ClerkProvider publishableKey={clerkPubKey}>{content}</ClerkProvider>
   }
-  
+
   return content
 }

@@ -5,9 +5,7 @@ import Heading from "@/components/heading"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
-import {
-  settingsAppearancePath,
-} from "@/routes"
+import { settingsAppearancePath } from "@/routes"
 import type { NavItem } from "@/types"
 
 const sidebarNavItems: NavItem[] = [
