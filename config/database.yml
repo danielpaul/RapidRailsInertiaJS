@@ -11,16 +11,16 @@ default: &default
 development:
   primary:
     <<: *default
-    database: inertia_rails_shadcn_starter_development
+    database: rapid_rails_inertia_js_development
   cache:
     <<: *default
-    database: inertia_rails_shadcn_starter_development
+    database: rapid_rails_inertia_js_development
   queue:
     <<: *default
-    database: inertia_rails_shadcn_starter_development
+    database: rapid_rails_inertia_js_development
   cable:
     <<: *default
-    database: inertia_rails_shadcn_starter_development
+    database: rapid_rails_inertia_js_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -28,16 +28,16 @@ development:
 test:
   primary:
     <<: *default
-    database: inertia_rails_shadcn_starter_test
+    database: rapid_rails_inertia_js_test
   cache:
     <<: *default
-    database: inertia_rails_shadcn_starter_test
+    database: rapid_rails_inertia_js_test
   queue:
     <<: *default
-    database: inertia_rails_shadcn_starter_test
+    database: rapid_rails_inertia_js_test
   cable:
     <<: *default
-    database: inertia_rails_shadcn_starter_test
+    database: rapid_rails_inertia_js_test
 
 # Production configuration using DATABASE_URL environment variable
 # All services use the same database

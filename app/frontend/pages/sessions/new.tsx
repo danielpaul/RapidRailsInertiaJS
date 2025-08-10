@@ -14,25 +14,28 @@ export default function SignInSignUp() {
           const token = await getToken()
           if (token) {
             // Post the clerk token to our backend to create a session
-            await fetch('/sign_in', {
-              method: 'POST',
+            await fetch("/sign_in", {
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                "Content-Type": "application/json",
+                "X-CSRF-Token":
+                  document
+                    .querySelector('meta[name="csrf-token"]')
+                    ?.getAttribute("content") ?? "",
               },
-              body: JSON.stringify({ clerk_token: token })
+              body: JSON.stringify({ clerk_token: token }),
             })
-            
+
             // Redirect after successful session creation
-            router.visit('/dashboard')
+            router.visit("/dashboard")
           }
         } catch (error) {
-          console.error('Failed to create session:', error)
+          console.error("Failed to create session:", error)
         }
       }
     }
 
-    createSession()
+    void createSession()
   }, [isSignedIn, getToken])
 
   return (
@@ -41,22 +44,18 @@ export default function SignInSignUp() {
       description="Sign in to your account or create a new one"
     >
       <Head title="Sign in" />
-      
+
       <div className="flex justify-center">
-        <SignIn 
-          routing="path"
-          path="/sign_in"
-          fallbackRedirectUrl="/switch"
-        />
+        <SignIn routing="path" path="/sign_in" fallbackRedirectUrl="/switch" />
       </div>
-      
-      <div className="mt-6 text-center text-xs text-muted-foreground">
+
+      <div className="text-muted-foreground mt-6 text-center text-xs">
         By clicking continue, you agree to our{" "}
-        <a href="#" className="underline underline-offset-4 hover:text-primary">
+        <a href="#" className="hover:text-primary underline underline-offset-4">
           Terms of Service
         </a>{" "}
         and{" "}
-        <a href="#" className="underline underline-offset-4 hover:text-primary">
+        <a href="#" className="hover:text-primary underline underline-offset-4">
           Privacy Policy
         </a>
         .

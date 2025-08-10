@@ -7,6 +7,7 @@ A modern full-stack starter application with Rails backend and React frontend us
 - [Inertia Rails](https://inertia-rails.dev) & [Vite Rails](https://vite-ruby.netlify.app) setup
 - [React](https://react.dev) frontend with TypeScript & [shadcn/ui](https://ui.shadcn.com) component library
 - [Clerk](https://clerk.com) User authentication system
+- Email delivery with [Postmark](https://postmarkapp.com) (production) and [letter_opener](https://github.com/ryanb/letter_opener) (development)
 - [Kamal](https://kamal-deploy.org/) for deployment
 - Optional SSR support
 
@@ -33,11 +34,44 @@ This application requires the following environment variables for proper functio
   - Required for frontend authentication components
 
 #### Rails Credentials
-The following secret should be added to Rails encrypted credentials using `rails credentials:edit`:
+The following secrets should be added to Rails encrypted credentials using `rails credentials:edit`:
 ```yaml
 clerk:
   api_key: "sk_test_your_secret_key_here"  # Your Clerk secret key
+
+# For production email delivery
+postmark:
+  api_token: "your_postmark_server_api_token_here"
 ```
+
+#### Email Delivery
+- `FROM_EMAIL` - Email address used as sender for all outgoing emails
+  - Must be verified in your Postmark account for production
+  - Default: `noreply@example.com`
+- `HOST` - Your application's domain name for generating links in emails (production)
+
+**Email Setup:** This application uses **Postmark** for production email delivery and **letter_opener** for development email preview.
+
+**Development:** No setup required - emails automatically open in your browser.
+
+**Production Setup:**
+1. Sign up for a [Postmark account](https://postmarkapp.com/) and create a server
+2. Add your Postmark API token to Rails credentials:
+   ```bash
+   rails credentials:edit
+   ```
+   Add:
+   ```yaml
+   postmark:
+     api_token: "your_postmark_server_api_token_here"
+   ```
+3. Set environment variables:
+   ```bash
+   FROM_EMAIL=noreply@yourdomain.com
+   HOST=yourdomain.com
+   ```
+4. Verify the sender signature in your Postmark account
+
 
 ### Optional Environment Variables
 
@@ -141,6 +175,10 @@ VITE_CLERK_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
 # Sentry Error Tracking (Production only)
 # SENTRY_DSN=https://your-dsn@o123456.ingest.sentry.io/123456
 # VITE_SENTRY_DSN=https://your-dsn@o123456.ingest.sentry.io/123456
+
+# Email Configuration (production)
+# FROM_EMAIL=noreply@yourdomain.com
+# HOST=yourdomain.com
 
 # Optional: Database (defaults to SQLite in development)
 # DATABASE_URL=postgresql://user:password@localhost/myapp_development

@@ -7,9 +7,9 @@ export default function SwitchAccount() {
   return (
     <AuthLayout>
       <Head title="Choose an account" />
-      
+
       <div className="flex justify-center">
-        <OrganizationList 
+        <OrganizationList
           hideSlug={true}
           afterCreateOrganizationUrl="/"
           afterSelectOrganizationUrl="/"
