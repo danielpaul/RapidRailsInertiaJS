@@ -1,0 +1,7 @@
+/ Call to action button partial
+/ Usage: = render 'shared/cta_button', text: 'Get Started', url: dashboard_url, style: 'margin: 32px 0;'
+%table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: local_assigns[:style] || "margin: 32px 0;"}
+  %tr
+    %td{style: "text-align: center;"}
+      %a{href: url, class: "button mobile-button", style: "display: inline-block; padding: 14px 32px; background-color: #3b82f6; color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: 600; text-align: center;"}
+        = text

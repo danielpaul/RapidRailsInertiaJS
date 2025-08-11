@@ -1,0 +1,62 @@
+!!!
+%html{lang: "en"}
+  %head
+    %meta{charset: "UTF-8"}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
+    %meta{name: "color-scheme", content: "light dark"}
+    %meta{name: "supported-color-schemes", content: "light dark"}
+    %title= yield(:title) || "Email from #{ENV.fetch('APP_NAME', 'RapidRails')}"
+    :css
+      /* Dark mode support */
+      @media (prefers-color-scheme: dark) {
+        .dark-mode-bg { background-color: #1f2937 !important; }
+        .dark-mode-text { color: #f9fafb !important; }
+        .dark-mode-border { border-color: #374151 !important; }
+        .dark-mode-card { background-color: #374151 !important; }
+      }
+      
+      /* Light mode (default) */
+      .light-mode-bg { background-color: #f9fafb; }
+      .light-mode-text { color: #111827; }
+      .light-mode-border { border-color: #e5e7eb; }
+      .light-mode-card { background-color: #ffffff; }
+      
+      /* Responsive design */
+      @media only screen and (max-width: 640px) {
+        .mobile-padding { padding: 16px !important; }
+        .mobile-font-size { font-size: 16px !important; }
+        .mobile-button { padding: 12px 24px !important; }
+      }
+      
+      /* Email client compatibility */
+      table { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+      img { -ms-interpolation-mode: bicubic; max-width: 100%; height: auto; }
+      
+      /* Button styles */
+      .button {
+        display: inline-block;
+        padding: 14px 32px;
+        background-color: #3b82f6;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+      }
+      
+      .button:hover {
+        background-color: #2563eb;
+      }
+
+  %body{style: "margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6;", class: "light-mode-bg dark-mode-bg"}
+    / Wrapper table for Outlook compatibility
+    %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: "background-color: #f9fafb;", class: "light-mode-bg dark-mode-bg"}
+      %tr
+        %td{style: "padding: 40px 20px;", class: "mobile-padding"}
+          / Container
+          %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", style: "margin: 0 auto; max-width: 600px; width: 100%;"}
+            %tr
+              %td
+                = yield

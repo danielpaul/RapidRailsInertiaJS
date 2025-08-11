@@ -1,113 +1,50 @@
-!!!
-%html{lang: "en"}
-  %head
-    %meta{charset: "UTF-8"}
-    %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
-    %meta{name: "color-scheme", content: "light dark"}
-    %meta{name: "supported-color-schemes", content: "light dark"}
-    %title= "Welcome to #{@app_name}!"
-    :css
-      /* Dark mode support */
-      @media (prefers-color-scheme: dark) {
-        .dark-mode-bg { background-color: #1f2937 !important; }
-        .dark-mode-text { color: #f9fafb !important; }
-        .dark-mode-border { border-color: #374151 !important; }
-        .dark-mode-card { background-color: #374151 !important; }
-      }
-      
-      /* Light mode (default) */
-      .light-mode-bg { background-color: #f9fafb; }
-      .light-mode-text { color: #111827; }
-      .light-mode-border { border-color: #e5e7eb; }
-      .light-mode-card { background-color: #ffffff; }
-      
-      /* Responsive design */
-      @media only screen and (max-width: 640px) {
-        .mobile-padding { padding: 16px !important; }
-        .mobile-font-size { font-size: 16px !important; }
-        .mobile-button { padding: 12px 24px !important; }
-      }
-      
-      /* Email client compatibility */
-      table { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
-      img { -ms-interpolation-mode: bicubic; max-width: 100%; height: auto; }
-      
-      /* Button styles */
-      .button {
-        display: inline-block;
-        padding: 14px 32px;
-        background-color: #3b82f6;
-        color: #ffffff !important;
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: 600;
-        text-align: center;
-        border: none;
-        cursor: pointer;
-      }
-      
-      .button:hover {
-        background-color: #2563eb;
-      }
+- content_for :title, "Welcome to #{@app_name}!"
 
-  %body{style: "margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6;", class: "light-mode-bg dark-mode-bg"}
-    / Wrapper table for Outlook compatibility
-    %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: "background-color: #f9fafb;", class: "light-mode-bg dark-mode-bg"}
-      %tr
-        %td{style: "padding: 40px 20px;", class: "mobile-padding"}
-          / Container
-          %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", style: "margin: 0 auto; max-width: 600px; width: 100%;"}
-            %tr
-              %td
-                / Header
-                %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: "margin-bottom: 32px;"}
-                  %tr
-                    %td{style: "text-align: center; padding: 24px; background-color: #ffffff; border-radius: 12px 12px 0 0; border: 1px solid #e5e7eb;", class: "light-mode-card dark-mode-card light-mode-border dark-mode-border"}
-                      %h1{style: "margin: 0; font-size: 28px; font-weight: 700; color: #111827;", class: "light-mode-text dark-mode-text mobile-font-size"}
-                        = "Welcome to #{@app_name}! 🎉"
-                
-                / Main content
-                %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: "background-color: #ffffff; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;", class: "light-mode-card dark-mode-card light-mode-border dark-mode-border"}
-                  %tr
-                    %td{style: "padding: 40px 32px;", class: "mobile-padding"}
-                      / Greeting
-                      %p{style: "margin: 0 0 24px 0; font-size: 18px; color: #111827;", class: "light-mode-text dark-mode-text"}
-                        = "Hi #{@user.name.present? ? @user.name : 'there'},"
-                      
-                      / Welcome message
-                      %p{style: "margin: 0 0 24px 0; font-size: 16px; color: #6b7280; line-height: 1.6;", class: "light-mode-text dark-mode-text"}
-                        = "We're thrilled to have you join our community! Your account has been successfully created and you're all set to start exploring everything #{@app_name} has to offer."
-                      
-                      / Features list
-                      %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: "margin: 32px 0;"}
-                        %tr
-                          %td{style: "padding: 20px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;", class: "light-mode-border dark-mode-border"}
-                            %h3{style: "margin: 0 0 16px 0; font-size: 18px; font-weight: 600; color: #111827;", class: "light-mode-text dark-mode-text"}
-                              Here's what you can do next:
-                            %ul{style: "margin: 0; padding-left: 20px; color: #6b7280;", class: "light-mode-text dark-mode-text"}
-                              %li{style: "margin-bottom: 8px;"} Explore your dashboard and customize your profile
-                              %li{style: "margin-bottom: 8px;"} Connect with other users in our community
-                              %li{style: "margin-bottom: 8px;"} Take advantage of our powerful features
-                              %li{style: "margin-bottom: 0;"} Reach out to our support team if you need any help
-                      
-                      / Call to action button
-                      %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: "margin: 32px 0;"}
-                        %tr
-                          %td{style: "text-align: center;"}
-                            %a{href: "#{ENV.fetch('APP_URL', 'http://localhost:3000')}/dashboard", class: "button mobile-button", style: "display: inline-block; padding: 14px 32px; background-color: #3b82f6; color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: 600; text-align: center;"}
-                              Get Started Now
-                      
-                      / Support message
-                      %p{style: "margin: 32px 0 0 0; font-size: 14px; color: #9ca3af; text-align: center; line-height: 1.5;", class: "light-mode-text dark-mode-text"}
-                        Need help getting started? We're here for you!
-                        %br
-                        %a{href: "mailto:#{ENV.fetch('SUPPORT_EMAIL', 'support@example.com')}", style: "color: #3b82f6; text-decoration: none;"} Contact our support team
-                
-                / Footer
-                %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: "margin-top: 32px;"}
-                  %tr
-                    %td{style: "text-align: center; padding: 24px; color: #9ca3af; font-size: 14px;", class: "light-mode-text dark-mode-text"}
-                      %p{style: "margin: 0 0 8px 0;"}
-                        = "This email was sent from #{@app_name}"
-                      %p{style: "margin: 0; font-size: 12px;"}
-                        If you didn't create an account, you can safely ignore this email.
+/ Header
+%table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: "margin-bottom: 32px;"}
+  %tr
+    %td{style: "text-align: center; padding: 24px; background-color: #ffffff; border-radius: 12px 12px 0 0; border: 1px solid #e5e7eb;", class: "light-mode-card dark-mode-card light-mode-border dark-mode-border"}
+      %h1{style: "margin: 0; font-size: 28px; font-weight: 700; color: #111827;", class: "light-mode-text dark-mode-text mobile-font-size"}
+        = "Welcome to #{@app_name}! 🎉"
+
+/ Main content
+%table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: "background-color: #ffffff; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;", class: "light-mode-card dark-mode-card light-mode-border dark-mode-border"}
+  %tr
+    %td{style: "padding: 40px 32px;", class: "mobile-padding"}
+      / Greeting
+      %p{style: "margin: 0 0 24px 0; font-size: 18px; color: #111827;", class: "light-mode-text dark-mode-text"}
+        = "Hi #{@user.name.present? ? @user.name : 'there'},"
+      
+      / Welcome message
+      %p{style: "margin: 0 0 24px 0; font-size: 16px; color: #6b7280; line-height: 1.6;", class: "light-mode-text dark-mode-text"}
+        = "We're thrilled to have you join our community! Your account has been successfully created and you're all set to start exploring everything #{@app_name} has to offer."
+      
+      / Features list
+      %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: "margin: 32px 0;"}
+        %tr
+          %td{style: "padding: 20px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;", class: "light-mode-border dark-mode-border"}
+            %h3{style: "margin: 0 0 16px 0; font-size: 18px; font-weight: 600; color: #111827;", class: "light-mode-text dark-mode-text"}
+              Here's what you can do next:
+            %ul{style: "margin: 0; padding-left: 20px; color: #6b7280;", class: "light-mode-text dark-mode-text"}
+              %li{style: "margin-bottom: 8px;"} Explore your dashboard and customize your profile
+              %li{style: "margin-bottom: 8px;"} Connect with other users in our community
+              %li{style: "margin-bottom: 8px;"} Take advantage of our powerful features
+              %li{style: "margin-bottom: 0;"} Reach out to our support team if you need any help
+      
+      / Call to action button using partial
+      = render 'shared/cta_button', text: 'Get Started Now', url: "#{ENV.fetch('APP_URL', 'http://localhost:3000')}/dashboard"
+      
+      / Support message
+      %p{style: "margin: 32px 0 0 0; font-size: 14px; color: #9ca3af; text-align: center; line-height: 1.5;", class: "light-mode-text dark-mode-text"}
+        Need help getting started? We're here for you!
+        %br
+        %a{href: "mailto:#{ENV.fetch('SUPPORT_EMAIL', 'support@example.com')}", style: "color: #3b82f6; text-decoration: none;"} Contact our support team
+
+/ Footer
+%table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: "margin-top: 32px;"}
+  %tr
+    %td{style: "text-align: center; padding: 24px; color: #9ca3af; font-size: 14px;", class: "light-mode-text dark-mode-text"}
+      %p{style: "margin: 0 0 8px 0;"}
+        = "This email was sent from #{@app_name}"
+      %p{style: "margin: 0; font-size: 12px;"}
+        If you didn't create an account, you can safely ignore this email.
