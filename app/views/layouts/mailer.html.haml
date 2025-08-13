@@ -13,6 +13,8 @@
         .dark-mode-text { color: #f9fafb !important; }
         .dark-mode-border { border-color: #374151 !important; }
         .dark-mode-card { background-color: #374151 !important; }
+        .logo-light { display: none !important; }
+        .logo-dark { display: block !important; }
       }
       
       /* Light mode (default) */
@@ -20,6 +22,8 @@
       .light-mode-text { color: #111827; }
       .light-mode-border { border-color: #e5e7eb; }
       .light-mode-card { background-color: #ffffff; }
+      .logo-light { display: block; }
+      .logo-dark { display: none; }
       
       /* Responsive design */
       @media only screen and (max-width: 640px) {
@@ -59,4 +63,7 @@
           %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", style: "margin: 0 auto; max-width: 600px; width: 100%;"}
             %tr
               %td
+                / Logo section
+                = render 'shared/logo', alt: "#{ENV.fetch('APP_NAME', 'RapidRails')} Logo"
+                
                 = yield

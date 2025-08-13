@@ -1,0 +1,41 @@
+/ Legal footer partial for email compliance
+/ Usage: = render 'shared/legal_footer'
+- company_name = ENV.fetch('COMPANY_NAME', ENV.fetch('APP_NAME', 'RapidRails'))
+- company_address = ENV.fetch('COMPANY_ADDRESS', nil)
+- app_url = ENV.fetch('APP_URL', 'http://localhost:3000')
+- support_email = ENV.fetch('SUPPORT_EMAIL', 'support@example.com')
+
+%table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: "margin-top: 32px; border-top: 1px solid #e5e7eb; padding-top: 24px;", class: "light-mode-border dark-mode-border"}
+  %tr
+    %td{style: "text-align: center; color: #9ca3af; font-size: 12px; line-height: 1.5;", class: "light-mode-text dark-mode-text"}
+      / Company information
+      %p{style: "margin: 0 0 16px 0; font-weight: 600;"}
+        = company_name
+      
+      - if company_address.present?
+        %p{style: "margin: 0 0 16px 0;"}
+          = company_address
+      
+      / Legal links
+      %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", style: "margin: 0 auto 16px auto;"}
+        %tr
+          %td{style: "padding: 0 8px;"}
+            %a{href: "#{app_url}/privacy", style: "color: #6b7280; text-decoration: underline;"} Privacy Policy
+          %td{style: "padding: 0 8px; color: #d1d5db;"} |
+          %td{style: "padding: 0 8px;"}
+            %a{href: "#{app_url}/terms", style: "color: #6b7280; text-decoration: underline;"} Terms of Service
+          %td{style: "padding: 0 8px; color: #d1d5db;"} |
+          %td{style: "padding: 0 8px;"}
+            %a{href: "#{app_url}/unsubscribe", style: "color: #6b7280; text-decoration: underline;"} Unsubscribe
+      
+      / Legal compliance text
+      %p{style: "margin: 0 0 8px 0; font-size: 11px; color: #9ca3af;"}
+        You received this email because you created an account with #{company_name}.
+        %br
+        If you no longer wish to receive these emails, you can 
+        %a{href: "#{app_url}/unsubscribe", style: "color: #6b7280; text-decoration: underline;"} unsubscribe here
+        \.
+      
+      %p{style: "margin: 0; font-size: 11px; color: #9ca3af;"}
+        Questions? Contact us at 
+        %a{href: "mailto:#{support_email}", style: "color: #6b7280; text-decoration: underline;"}= support_email

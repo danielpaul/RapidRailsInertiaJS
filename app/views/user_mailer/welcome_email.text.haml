@@ -17,5 +17,13 @@ Need help getting started? We're here for you!
 = "Contact our support team: #{ENV.fetch('SUPPORT_EMAIL', 'support@example.com')}"
 
 ---
-= "This email was sent from #{@app_name}"
-If you didn't create an account, you can safely ignore this email.
+= "#{ENV.fetch('COMPANY_NAME', ENV.fetch('APP_NAME', 'RapidRails'))}"
+- if ENV.fetch('COMPANY_ADDRESS', nil).present?
+  = ENV.fetch('COMPANY_ADDRESS')
+
+= "Privacy Policy: #{ENV.fetch('APP_URL', 'http://localhost:3000')}/privacy"
+= "Terms of Service: #{ENV.fetch('APP_URL', 'http://localhost:3000')}/terms"
+= "Unsubscribe: #{ENV.fetch('APP_URL', 'http://localhost:3000')}/unsubscribe"
+
+= "You received this email because you created an account with #{ENV.fetch('COMPANY_NAME', ENV.fetch('APP_NAME', 'RapidRails'))}."
+= "Questions? Contact us at #{ENV.fetch('SUPPORT_EMAIL', 'support@example.com')}"
