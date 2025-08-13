@@ -1,20 +1,18 @@
 / Logo partial with dark/light mode support
 / Usage: = render 'shared/logo', alt: 'Company Logo', style: 'margin-bottom: 24px;'
-- light_logo = ENV.fetch('LOGO_LIGHT_URL', nil)
-- dark_logo = ENV.fetch('LOGO_DARK_URL', nil)
-- logo_alt = local_assigns[:alt] || ENV.fetch('APP_NAME', 'RapidRails')
+- logo_alt = local_assigns[:alt] || AppConstants::APP_NAME
 - container_style = local_assigns[:style] || "margin-bottom: 24px;"
 
 %table{role: "presentation", cellspacing: "0", cellpadding: "0", border: "0", width: "100%", style: container_style}
   %tr
     %td{style: "text-align: center;"}
-      - if light_logo.present? || dark_logo.present?
+      - if AppConstants::LOGO_LIGHT_URL.present? || AppConstants::LOGO_DARK_URL.present?
         / Show light logo by default and dark logo for dark mode
-        - if light_logo.present?
-          %img{src: light_logo, alt: logo_alt, style: "max-width: 200px; height: auto; display: block; margin: 0 auto;", class: "logo-light"}
-        - if dark_logo.present?
-          %img{src: dark_logo, alt: logo_alt, style: "max-width: 200px; height: auto; display: none; margin: 0 auto;", class: "logo-dark"}
+        - if AppConstants::LOGO_LIGHT_URL.present?
+          %img{src: AppConstants::LOGO_LIGHT_URL, alt: logo_alt, style: "max-width: 200px; height: auto; display: block; margin: 0 auto;", class: "logo-light"}
+        - if AppConstants::LOGO_DARK_URL.present?
+          %img{src: AppConstants::LOGO_DARK_URL, alt: logo_alt, style: "max-width: 200px; height: auto; display: none; margin: 0 auto;", class: "logo-dark"}
       - else
         / Fallback text logo when no images are configured
         %h2{style: "margin: 0; font-size: 24px; font-weight: 700; color: #3b82f6;"}
-          = ENV.fetch('APP_NAME', 'RapidRails')
+          = AppConstants::APP_NAME

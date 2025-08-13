@@ -11,19 +11,15 @@ Here's what you can do next:
 • Take advantage of our powerful features
 • Reach out to our support team if you need any help
 
-= "Get started by visiting: #{ENV.fetch('APP_URL', 'http://localhost:3000')}/dashboard"
+= "Get started by visiting: #{AppConstants::APP_URL}/dashboard"
 
 Need help getting started? We're here for you!
-= "Contact our support team: #{ENV.fetch('SUPPORT_EMAIL', 'support@example.com')}"
+= "Contact our support team: #{AppConstants::SUPPORT_EMAIL}"
 
 ---
-= "#{ENV.fetch('COMPANY_NAME', ENV.fetch('APP_NAME', 'RapidRails'))}"
-- if ENV.fetch('COMPANY_ADDRESS', nil).present?
-  = ENV.fetch('COMPANY_ADDRESS')
+= AppConstants::COMPANY_NAME
+- if AppConstants::COMPANY_ADDRESS.present?
+  = AppConstants::COMPANY_ADDRESS
 
-= "Privacy Policy: #{ENV.fetch('APP_URL', 'http://localhost:3000')}/privacy"
-= "Terms of Service: #{ENV.fetch('APP_URL', 'http://localhost:3000')}/terms"
-= "Unsubscribe: #{ENV.fetch('APP_URL', 'http://localhost:3000')}/unsubscribe"
-
-= "You received this email because you created an account with #{ENV.fetch('COMPANY_NAME', ENV.fetch('APP_NAME', 'RapidRails'))}."
-= "Questions? Contact us at #{ENV.fetch('SUPPORT_EMAIL', 'support@example.com')}"
+= "You received this email because you created an account with #{AppConstants::COMPANY_NAME}."
+= "Questions? Contact us at #{AppConstants::SUPPORT_EMAIL}"
