@@ -124,7 +124,8 @@ This application uses Clerk webhooks to automatically sync user data changes. To
    Add the webhook secret:
    ```yaml
    clerk:
-     api_key: "sk_test_your_secret_key_here"
+     secret_key: "sk_test_your_secret_key_here"
+     publishable_key: "pk_test_your_publishable_key_here"
      webhook_secret: "whsec_your_webhook_secret_here"
    ```
 

@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 # Only initialize Sentry in production environment to avoid noise in development
-if Rails.env.production? && ENV["SENTRY_DSN"].present?
+sentry_dsn = Rails.application.credentials.dig(:sentry, :dsn) || ENV["SENTRY_DSN"]
+if Rails.env.production? && sentry_dsn.present?
   Sentry.init do |config|
-    config.dsn = ENV["SENTRY_DSN"]
+    config.dsn = sentry_dsn
     config.breadcrumbs_logger = [:active_support_logger, :http_logger]
 
     # Set tracing sample rate based on environment variable or default to 0.1 (10%)
