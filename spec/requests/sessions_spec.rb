@@ -24,6 +24,57 @@ RSpec.describe "Sessions", type: :request do
     end
   end
 
+  describe "GET /sign_up" do
+    context "when user is not signed in" do
+      it "returns http success" do
+        get sign_up_url
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context "when user is already signed in" do
+      before { sign_in_as user }
+
+      it "redirects to root with notice" do
+        get sign_up_url
+        expect(response).to redirect_to(root_path)
+        expect(flash[:notice]).to eq("You are already signed in")
+      end
+    end
+  end
+
+  describe "POST /sign_in" do
+    context "with valid clerk token" do
+      it "returns success" do
+        post "/sign_in", params: {clerk_token: "valid_token"}
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "without clerk token" do
+      it "returns unauthorized" do
+        post "/sign_in", params: {}
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe "POST /sign_up" do
+    context "with valid clerk token" do
+      it "returns success" do
+        post "/sign_up", params: {clerk_token: "valid_token"}
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "without clerk token" do
+      it "returns unauthorized" do
+        post "/sign_up", params: {}
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
   describe "GET /switch" do
     context "when user is signed in" do
       before { sign_in_as user }
