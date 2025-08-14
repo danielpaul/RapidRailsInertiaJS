@@ -30,6 +30,40 @@ def setup_environment_file
   end
 end
 
+def setup_database_names
+  database_config_path = "config/database.yml"
+
+  puts "\n== Database Configuration =="
+  puts "Current database prefix: rapid_rails_inertia_js"
+
+  project_name = prompt_user("Enter your project name (or press Enter to keep 'rapid_rails_inertia_js'): ").strip
+
+  if project_name.empty?
+    puts "✓ Keeping default database prefix: rapid_rails_inertia_js"
+    return
+  end
+
+  # Validate project name for database usage
+  unless project_name.match?(/\A[a-z][a-z0-9_]*\z/)
+    puts "⚠  Invalid project name. Must start with a letter and contain only lowercase letters, numbers, and underscores."
+    puts "   Keeping default database prefix: rapid_rails_inertia_js"
+    return
+  end
+
+  puts "Updating database configuration with project name: #{project_name}"
+
+  # Read current database.yml
+  database_config = File.read(database_config_path)
+
+  # Replace the database prefix
+  updated_config = database_config.gsub(/rapid_rails_inertia_js/, project_name)
+
+  # Write updated configuration
+  File.write(database_config_path, updated_config)
+
+  puts "✓ Database configuration updated with prefix: #{project_name}"
+end
+
 def setup_credentials
   credentials_path = "config/credentials.yml.enc"
   master_key_path = "config/master.key"
@@ -103,6 +137,9 @@ FileUtils.chdir APP_ROOT do
 
   # Setup environment file
   setup_environment_file
+
+  # Setup database names
+  setup_database_names
 
   # Setup Rails credentials
   setup_credentials
