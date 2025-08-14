@@ -13,13 +13,88 @@ A modern full-stack starter application with Rails backend and React frontend us
 
 ## Setup
 
-1. Clone this repository
-2. Set up environment variables (see [Environment Variables](#environment-variables))
-3. Setup dependencies & run the server:
+### Quick Start
+
+1. **Clone this repository**
+   ```bash
+   git clone https://github.com/danielpaul/RapidRailsInertiaJS.git
+   cd RapidRailsInertiaJS
+   ```
+
+2. **Run the setup script**
    ```bash
    bin/setup
    ```
-4. Open http://localhost:3000
+   
+   The setup script will:
+   - Install Ruby and Node.js dependencies
+   - Create `.env` file from `.env.example` (if not present)
+   - Guide you through Rails credentials setup
+   - Prepare the database
+   - Start the development server
+
+3. **Open http://localhost:3000**
+
+### Setup Details
+
+The `bin/setup` script handles most configuration automatically, but you'll need to configure:
+
+#### 1. Environment Variables (.env file)
+The setup script will create a `.env` file from `.env.example`. You need to:
+- Add your Clerk publishable key: `VITE_CLERK_PUBLISHABLE_KEY=pk_test_your_key_here`
+- Configure any other environment-specific settings
+
+#### 2. Rails Credentials
+The setup script will help you configure Rails encrypted credentials. You need to add:
+- **Clerk secret key** for backend authentication
+- **Postmark API token** for production email delivery
+
+Run `bin/rails credentials:edit` to add:
+```yaml
+clerk:
+  secret_key: "sk_test_your_secret_key_here"
+
+# For production email delivery
+postmark:
+  api_token: "your_postmark_server_api_token_here"
+```
+
+**Credentials Troubleshooting:**
+- If you have an existing encrypted credentials file but missing `master.key`, the setup script will guide you through recovery options
+- If you need to start fresh, choose option 2 in the setup script to recreate credentials
+- Use `config/credentials.yml.example` as a reference for the expected structure
+
+### Manual Setup (Alternative)
+
+If you prefer manual setup or encounter issues:
+
+1. **Install dependencies:**
+   ```bash
+   bundle install
+   npm install
+   ```
+
+2. **Create environment file:**
+   ```bash
+   cp .env.example .env
+   # Edit .env to add your environment variables
+   ```
+
+3. **Setup Rails credentials:**
+   ```bash
+   rails credentials:edit
+   # Add your secrets following config/credentials.yml.example
+   ```
+
+4. **Prepare database:**
+   ```bash
+   bin/rails db:prepare
+   ```
+
+5. **Start the server:**
+   ```bash
+   bin/dev
+   ```
 
 ## Environment Variables
 
