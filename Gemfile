@@ -81,6 +81,9 @@ group :development do
 
   # Use letter_opener to preview emails in the browser in development [https://github.com/ryanb/letter_opener]
   gem "letter_opener"
+
+  # Automatically annotate models with schema information
+  gem "annotaterb"
 end
 
 group :test do

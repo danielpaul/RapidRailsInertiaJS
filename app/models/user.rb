@@ -5,9 +5,9 @@
 # Table name: users
 #
 #  id         :bigint           not null, primary key
-#  clerk_id   :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  clerk_id   :string           not null
 #
 # Indexes
 #
