@@ -40,7 +40,7 @@ gem "thruster", require: false
 gem "vite_rails", "~> 3.0"
 
 # Error tracking with Sentry for production deployments
-gem "sentry-ruby", "~> 5.22"
+gem "sentry-ruby", "~> 5.28"
 gem "sentry-rails", "~> 5.22"
 
 # The Rails adapter for Inertia.js [https://inertia-rails.dev]
