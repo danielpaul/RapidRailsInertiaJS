@@ -9,11 +9,22 @@ import { cn } from "@/lib/utils"
 
 type FormDataType = Record<string, FormDataConvertible>
 
-interface FormContextType<TForm extends FormDataType = FormDataType> {
-  form?: InertiaFormProps<TForm>
+// A minimal, non-recursive view of the Inertia form. The full
+// `InertiaFormProps<TForm>` relies on recursive key/value generics that blow up
+// ("excessively deep") when instantiated with the open-ended `FormDataType`, so
+// the context stores only the string-keyed surface this component consumes.
+interface FormContextForm {
+  data: FormDataType
+  errors: Record<string, string | undefined>
+  setData: (key: string, value: FormDataConvertible) => void
+  clearErrors: (key: string) => void
 }
 
-const FormContext = React.createContext<FormContextType>({} as FormContextType)
+interface FormContextType {
+  form?: FormContextForm
+}
+
+const FormContext = React.createContext<FormContextType>({})
 
 type FormProps<TForm extends FormDataType = FormDataType> =
   React.PropsWithChildren<
@@ -114,7 +125,7 @@ const Renderer = ({
       id,
       name,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-        form.setData(name, e.target.value as FormDataConvertible),
+        form.setData(name, e.target.value),
       onKeyPress: () => {
         if (form.errors[name]) {
           form.clearErrors(name)
@@ -145,7 +156,7 @@ const useFormField = () => {
     formItemId: `${id}-form-item`,
     formDescriptionId: `${id}-form-item-description`,
     formMessageId: `${id}-form-item-message`,
-    error: form.errors[fieldContext.name],
+    error: form.errors[String(fieldContext.name)],
     form,
   }
 }
