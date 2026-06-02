@@ -46,7 +46,7 @@ gem "sentry-ruby", "~> 5.22"
 gem "sentry-rails", "~> 5.22"
 
 # The Rails adapter for Inertia.js [https://inertia-rails.dev]
-gem "inertia_rails", "~> 3.6"
+gem "inertia_rails", "~> 3.21"
 
 # Clerk SDK for authentication
 gem "clerk-sdk-ruby", require: "clerk"
