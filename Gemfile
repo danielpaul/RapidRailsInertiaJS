@@ -55,8 +55,8 @@ gem "hashid-rails", "~> 1.0"
 # Brings Rails named routes to javascript
 gem "js-routes"
 
-# Postmark for production email delivery
-gem "postmark-rails"
+# Resend for production email delivery
+gem "resend"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

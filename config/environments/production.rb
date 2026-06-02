@@ -58,15 +58,10 @@ Rails.application.configure do
   # Configure email delivery for production
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.delivery_method = :postmark
+  config.action_mailer.delivery_method = :resend
 
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = {host: ENV.fetch("HOST", "example.com")}
-
-  # Configure Postmark for email delivery
-  config.action_mailer.postmark_settings = {
-    api_token: Rails.application.credentials.dig(:postmark, :api_token)
-  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

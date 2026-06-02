@@ -9,14 +9,14 @@ namespace :email do
     puts "Default from address: #{ApplicationMailer.default[:from]}"
 
     if Rails.env.production?
-      api_token = Rails.application.credentials.dig(:postmark, :api_token)
-      if api_token.present?
-        puts "✅ Postmark API token is configured"
-        puts "API token: #{api_token[0..6]}..." # Show only first 7 characters for security
+      api_key = Rails.application.credentials.dig(:resend, :api_key) || ENV["RESEND_API_KEY"]
+      if api_key.present?
+        puts "✅ Resend API key is configured"
+        puts "API key: #{api_key[0..6]}..." # Show only first 7 characters for security
       else
-        puts "❌ Postmark API token is missing from credentials"
+        puts "❌ Resend API key is missing from credentials"
         puts "Run: EDITOR='your_editor' rails credentials:edit"
-        puts "Add: postmark:\n       api_token: your_token_here"
+        puts "Add: resend:\n       api_key: your_api_key_here"
       end
     end
 
