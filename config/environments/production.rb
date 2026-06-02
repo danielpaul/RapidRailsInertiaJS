@@ -73,12 +73,13 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [:id]
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
+  # Enable DNS rebinding protection and guard against `Host` header attacks.
+  # Provide a comma-separated allowlist via ALLOWED_HOSTS, e.g.
+  # ALLOWED_HOSTS="example.com,www.example.com". When unset, the HOST env var
+  # (already used for mailer URLs) is used as a sensible default.
+  allowed_hosts = ENV.fetch("ALLOWED_HOSTS", ENV.fetch("HOST", "")).split(",").map(&:strip).reject(&:blank?)
+  config.hosts = allowed_hosts if allowed_hosts.any?
+
   # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  config.host_authorization = {exclude: ->(request) { request.path == "/up" }}
 end

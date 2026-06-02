@@ -5,6 +5,8 @@ class WebhooksController < ApplicationController
   before_action :verify_webhook_signature, unless: -> { Rails.env.test? }
 
   def clerk
+    return head :ok unless first_delivery?
+
     event_type = params[:type]
 
     case event_type
@@ -20,6 +22,16 @@ class WebhooksController < ApplicationController
   end
 
   private
+
+  # Svix retries deliveries on non-2xx responses or timeouts, so the same event
+  # can arrive more than once. Use the unique `svix-id` to process each delivery
+  # only once. Returns false when this delivery has already been seen.
+  def first_delivery?
+    svix_id = request.headers["svix-id"]
+    return true if svix_id.blank?
+
+    Rails.cache.write("webhooks/clerk/#{svix_id}", true, expires_in: 1.hour, unless_exist: true)
+  end
 
   def handle_user_deleted(data)
     # Clerk webhook payload structure: data contains the user object
@@ -60,7 +72,7 @@ class WebhooksController < ApplicationController
     return head :unauthorized unless valid
 
     Rails.logger.info("Verified Clerk webhook: #{svix_id}")
-  rescue => e
+  rescue ArgumentError, OpenSSL::OpenSSLError => e
     Rails.logger.error("Webhook signature verification failed: #{e.message}")
     head :unauthorized
   end

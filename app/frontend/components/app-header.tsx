@@ -1,5 +1,5 @@
 import { Link, usePage } from "@inertiajs/react"
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from "lucide-react"
+import { Menu, Search } from "lucide-react"
 
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { Icon } from "@/components/icon"
@@ -31,33 +31,13 @@ import {
 } from "@/components/ui/tooltip"
 import { UserMenuContent } from "@/components/user-menu-content"
 import { useInitials } from "@/hooks/use-initials"
+import { footerNavItems, mainNavItems } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
 import { dashboardPath } from "@/routes"
-import type { BreadcrumbItem, NavItem, SharedData } from "@/types"
+import type { BreadcrumbItem, SharedData } from "@/types"
 
 import AppLogo from "./app-logo"
 import AppLogoIcon from "./app-logo-icon"
-
-const mainNavItems: NavItem[] = [
-  {
-    title: "Dashboard",
-    href: dashboardPath(),
-    icon: LayoutGrid,
-  },
-]
-
-const rightNavItems: NavItem[] = [
-  {
-    title: "Repository",
-    href: "https://github.com/skryukov/inertia-rails-shadcn-starter",
-    icon: Folder,
-  },
-  {
-    title: "Documentation",
-    href: "https://inertia-rails.dev",
-    icon: BookOpen,
-  },
-]
 
 const activeItemStyles =
   "text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100"
@@ -82,6 +62,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                   variant="ghost"
                   size="icon"
                   className="mr-2 h-[34px] w-[34px]"
+                  aria-label="Open navigation menu"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
@@ -112,7 +93,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                     </div>
 
                     <div className="flex flex-col space-y-4">
-                      {rightNavItems.map((item) => (
+                      {footerNavItems.map((item) => (
                         <a
                           key={item.title}
                           href={item.href}
@@ -145,9 +126,9 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
           <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
             <NavigationMenu className="flex h-full items-stretch">
               <NavigationMenuList className="flex h-full items-stretch space-x-2">
-                {mainNavItems.map((item, index) => (
+                {mainNavItems.map((item) => (
                   <NavigationMenuItem
-                    key={index}
+                    key={item.href}
                     className="relative flex h-full items-center"
                   >
                     <Link
@@ -178,11 +159,12 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                 variant="ghost"
                 size="icon"
                 className="group h-9 w-9 cursor-pointer"
+                aria-label="Search"
               >
                 <Search className="!size-5 opacity-80 group-hover:opacity-100" />
               </Button>
               <div className="hidden lg:flex">
-                {rightNavItems.map((item) => (
+                {footerNavItems.map((item) => (
                   <TooltipProvider key={item.title} delayDuration={0}>
                     <Tooltip>
                       <TooltipTrigger>
@@ -211,7 +193,11 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="size-10 rounded-full p-1">
+                <Button
+                  variant="ghost"
+                  className="size-10 rounded-full p-1"
+                  aria-label="Open user menu"
+                >
                   <Avatar className="size-8 overflow-hidden rounded-full">
                     <AvatarImage
                       src={auth.user?.avatar}

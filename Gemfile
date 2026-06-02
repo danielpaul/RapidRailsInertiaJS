@@ -60,6 +60,9 @@ gem "js-routes"
 # Resend for production email delivery
 gem "resend"
 
+# Rate limiting / throttling middleware [https://github.com/rack/rack-attack]
+gem "rack-attack", require: "rack/attack"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -69,6 +72,12 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # Performance-focused RuboCop cops [https://github.com/rubocop/rubocop-performance]
+  gem "rubocop-performance", require: false
+
+  # Detect N+1 queries and unused eager loading [https://github.com/flyerhzm/bullet]
+  gem "bullet"
 
   # RSpec for Rails 7+
   gem "rspec-rails", "~> 8.0"
@@ -83,10 +92,16 @@ group :development do
 
   # Use letter_opener to preview emails in the browser in development [https://github.com/ryanb/letter_opener]
   gem "letter_opener"
+
+  # Fast, powerful Git hooks manager [https://github.com/evilmartians/lefthook]
+  gem "lefthook", require: false
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  # Code coverage reporting [https://github.com/simplecov-ruby/simplecov]
+  gem "simplecov", require: false
 end

@@ -57,4 +57,16 @@ export default [
     files: ["**/*.js"],
     ...tseslint.configs.disableTypeChecked,
   },
+  {
+    // Test files lean on mocks whose types are intentionally loose.
+    files: ["app/frontend/**/*.{test,spec}.{ts,tsx}"],
+    rules: {
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/unbound-method": "off",
+    },
+  },
 ]

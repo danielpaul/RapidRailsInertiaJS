@@ -3,16 +3,20 @@
   "type": "module",
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@testing-library/react": "^16.3.2",
+    "@vitest/coverage-v8": "^4.1.8",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.5.0",
+    "jsdom": "^29.1.1",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "typescript-eslint": "^8.60.1",
     "vite": "^7.3.5",
-    "vite-plugin-ruby": "^5.2.2"
+    "vite-plugin-ruby": "^5.2.2",
+    "vitest": "^4.1.8"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.8",
@@ -55,6 +59,9 @@
     "lint": "eslint app/frontend --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier --check 'app/frontend/**/*.{ts,tsx,js}'",
-    "format:fix": "npm run format -- --write"
+    "format:fix": "npm run format -- --write",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   }
 }

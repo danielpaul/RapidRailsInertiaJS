@@ -43,3 +43,6 @@ node_modules
 
 # Ignore Vendor Bundle
 /vendor/bundle
+
+# Test coverage
+/coverage

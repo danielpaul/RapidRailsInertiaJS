@@ -1,0 +1,17 @@
+# Git hooks managed by lefthook.
+# Install once after `bundle install` with: bundle exec lefthook install
+pre-commit:
+  parallel: true
+  commands:
+    rubocop:
+      glob: "*.rb"
+      run: bundle exec rubocop --force-exclusion {staged_files}
+    prettier:
+      glob: "app/frontend/**/*.{ts,tsx,js}"
+      run: npx prettier --check {staged_files}
+    eslint:
+      glob: "app/frontend/**/*.{ts,tsx}"
+      run: npx eslint {staged_files}
+    typecheck:
+      glob: "app/frontend/**/*.{ts,tsx}"
+      run: npm run check

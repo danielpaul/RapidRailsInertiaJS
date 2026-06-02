@@ -14,9 +14,14 @@ export const useFlash = () => {
     setCurrentFlash(flash)
   }, [flash])
 
-  router.on("start", () => {
-    setCurrentFlash(emptyFlash)
-  })
+  useEffect(() => {
+    // Clear stale flash messages as soon as a new visit starts. `router.on`
+    // returns an unsubscribe callback that must run on unmount to avoid leaking
+    // a new listener on every render.
+    return router.on("start", () => {
+      setCurrentFlash(emptyFlash)
+    })
+  }, [])
 
   useEffect(() => {
     if (currentFlash.alert) {
