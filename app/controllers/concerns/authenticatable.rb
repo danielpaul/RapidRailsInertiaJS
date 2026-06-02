@@ -15,14 +15,14 @@ module Authenticatable
   end
   alias require_clerk_session! authenticate_user!
 
-  def current_user
-    return @current_user if defined?(@current_user)
+  # Memoized per request; user/org/role are each resolved lazily on first access,
+  # so requests that only need the user don't pay for an Org lookup.
+  def clerk_auth
+    @clerk_auth ||= ClerkAuthenticationResolver.call(clerk)
+  end
 
-    if clerk && (user_id = clerk.user_id)
-      @current_user = User.find_or_create_by(clerk_id: user_id)
-    else
-      @current_user = nil
-    end
+  def current_user
+    clerk_auth.user
   end
 
   def clerk_user
@@ -36,24 +36,15 @@ module Authenticatable
   end
 
   def current_org
-    return @current_org if defined?(@current_org)
-
-    if !Rails.env.test? && (org_id = clerk.organization_id)
-      @current_org = Org.find_or_create_by(clerk_org_id: org_id)
-    else
-      @current_org = nil
-    end
+    clerk_auth.org
   end
 
   def org_account?
     current_org.present?
   end
 
+  # The user's role in the active org, read live from the Clerk token.
   def current_user_org_role
-    if org_account? && !Rails.env.test?
-      clerk.organization_role
-    else
-      nil
-    end
+    clerk_auth.role
   end
 end

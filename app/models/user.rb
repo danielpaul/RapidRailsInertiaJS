@@ -16,7 +16,15 @@
 class User < ApplicationRecord
   include Hashid::Rails
 
+  # Safety net only — the user.updated webhook invalidates this cache, so a long
+  # TTL just risks serving stale profiles when a webhook is missed/fails.
+  CLERK_CACHE_TTL = 1.hour
+
   validates :clerk_id, presence: true, uniqueness: true
+
+  def self.clerk_cache_key(clerk_id)
+    "clerk_user/#{clerk_id}"
+  end
 
   def clerk_user
     @clerk_user ||= fetch_clerk_user
@@ -40,8 +48,8 @@ class User < ApplicationRecord
   def fetch_clerk_user
     return nil if Rails.env.test? # Skip API calls in test
 
-    # Cache for longer period since we'll clear cache via webhook when Clerk user is updated
-    Rails.cache.fetch("clerk_user/#{clerk_id}", expires_in: 24.hours) do
+    # Cache the Clerk profile; the user.updated webhook clears this key on change.
+    Rails.cache.fetch(self.class.clerk_cache_key(clerk_id), expires_in: CLERK_CACHE_TTL) do
       Clerk::SDK.new.users.get_user(clerk_id)
     end
   rescue Clerk::Errors::Base => e
