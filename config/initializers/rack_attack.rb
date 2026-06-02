@@ -13,9 +13,13 @@ class Rack::Attack
     request.ip if request.post? && request.path == "/webhooks/clerk"
   end
 
-  # General safety net for all other dynamic requests (assets excluded).
+  # General safety net for all other dynamic requests. Static assets and the
+  # health check endpoint are excluded so load balancer probes of /up are never
+  # throttled (consistent with silence_healthcheck_path / host_authorization).
   throttle("req/ip", limit: 300, period: 5.minutes) do |request|
-    request.ip unless request.path.start_with?("/assets", "/vite")
+    unless request.path == "/up" || request.path.start_with?("/assets", "/vite")
+      request.ip
+    end
   end
 
   # Return 429 with a small retry hint when throttled.

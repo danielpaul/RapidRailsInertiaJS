@@ -1,5 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from "react"
 
+import { buttonVariants } from "@/components/ui/button"
+
 interface ErrorBoundaryProps {
   children: ReactNode
 }
@@ -23,6 +25,17 @@ export class ErrorBoundary extends Component<
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Unhandled rendering error:", error, errorInfo)
+
+    // Report to Sentry when it is active (same guard as the init in
+    // entrypoints/inertia.ts). captureException is a no-op if Sentry was never
+    // initialized, and the dynamic import keeps Sentry out of the dev bundle.
+    if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_DSN) {
+      void import("@sentry/react").then((Sentry) => {
+        Sentry.captureException(error, {
+          contexts: { react: { componentStack: errorInfo.componentStack } },
+        })
+      })
+    }
   }
 
   handleReload = () => {
@@ -41,7 +54,7 @@ export class ErrorBoundary extends Component<
           <button
             type="button"
             onClick={this.handleReload}
-            className="bg-primary text-primary-foreground ring-offset-background focus-visible:ring-ring inline-flex h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className={buttonVariants()}
           >
             Reload page
           </button>

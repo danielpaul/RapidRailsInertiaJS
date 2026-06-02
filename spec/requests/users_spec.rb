@@ -72,6 +72,22 @@ RSpec.describe "Webhooks", type: :request do
         expect(response).to have_http_status(:ok)
         expect(User.find_by(id: recreated.id)).to be_present
       end
+
+      it "releases the claim when the handler fails so a retry can reprocess" do
+        cache = ActiveSupport::Cache::MemoryStore.new
+        allow(Rails).to receive(:cache).and_return(cache)
+        allow_any_instance_of(User).to receive(:destroy!).and_raise(ActiveRecord::RecordNotDestroyed)
+        headers = {"svix-id" => "msg_failed"}
+
+        expect {
+          post webhooks_clerk_url,
+            params: {type: "user.deleted", data: {id: user.clerk_id}},
+            headers: headers
+        }.to raise_error(ActiveRecord::RecordNotDestroyed)
+
+        # The idempotency claim must be cleared so Svix's retry is not skipped.
+        expect(cache.exist?("webhooks/clerk/msg_failed")).to be(false)
+      end
     end
   end
 end
