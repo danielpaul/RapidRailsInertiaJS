@@ -69,8 +69,8 @@ export default function Welcome() {
                     text: "Rails Guides",
                     href: "https://guides.rubyonrails.org",
                   },
-                ].map((resource, index) => (
-                  <ResourceItem key={index} {...resource} />
+                ].map((resource) => (
+                  <ResourceItem key={resource.href} {...resource} />
                 ))}
               </ul>
 

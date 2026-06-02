@@ -3,6 +3,7 @@ import createServer from "@inertiajs/react/server"
 import { type ReactNode, createElement } from "react"
 import ReactDOMServer from "react-dom/server"
 
+import { ErrorBoundary } from "@/components/error-boundary"
 import PersistentLayout from "@/layouts/persistent-layout"
 
 // Temporary type definition, until @inertiajs/react provides one
@@ -35,6 +36,7 @@ createServer((page) =>
 
       return page
     },
-    setup: ({ App, props }) => createElement(App, props),
+    setup: ({ App, props }) =>
+      createElement(ErrorBoundary, null, createElement(App, props)),
   }),
 )

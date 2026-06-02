@@ -5,21 +5,42 @@ class WebhooksController < ApplicationController
   before_action :verify_webhook_signature, unless: -> { Rails.env.test? }
 
   def clerk
-    event_type = params[:type]
+    svix_id = request.headers["svix-id"]
+    return head :ok unless claim_delivery(svix_id)
 
-    case event_type
-    when "user.deleted"
-      handle_user_deleted(params[:data])
-    when "user.updated"
-      handle_user_updated(params[:data])
-    else
-      Rails.logger.info("Unhandled Clerk webhook event: #{event_type}")
+    begin
+      case params[:type]
+      when "user.deleted"
+        handle_user_deleted(params[:data])
+      when "user.updated"
+        handle_user_updated(params[:data])
+      else
+        Rails.logger.info("Unhandled Clerk webhook event: #{params[:type]}")
+      end
+    rescue
+      # Release the claim so Svix's retry of this same delivery can be
+      # processed again, instead of being silently skipped as a duplicate.
+      release_delivery(svix_id)
+      raise
     end
 
     head :ok
   end
 
   private
+
+  # Svix retries deliveries on non-2xx responses or timeouts, so the same event
+  # can arrive more than once. Atomically claim the unique `svix-id` so a given
+  # delivery is processed only once. Returns false when it was already claimed.
+  def claim_delivery(svix_id)
+    return true if svix_id.blank?
+
+    Rails.cache.write("webhooks/clerk/#{svix_id}", true, expires_in: 1.hour, unless_exist: true)
+  end
+
+  def release_delivery(svix_id)
+    Rails.cache.delete("webhooks/clerk/#{svix_id}") if svix_id.present?
+  end
 
   def handle_user_deleted(data)
     # Clerk webhook payload structure: data contains the user object
@@ -60,7 +81,7 @@ class WebhooksController < ApplicationController
     return head :unauthorized unless valid
 
     Rails.logger.info("Verified Clerk webhook: #{svix_id}")
-  rescue => e
+  rescue ArgumentError, OpenSSL::OpenSSLError => e
     Rails.logger.error("Webhook signature verification failed: #{e.message}")
     head :unauthorized
   end

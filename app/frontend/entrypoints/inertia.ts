@@ -2,6 +2,7 @@ import { createInertiaApp } from "@inertiajs/react"
 import { type ReactNode, createElement } from "react"
 import { createRoot } from "react-dom/client"
 
+import { ErrorBoundary } from "@/components/error-boundary"
 import { initializeTheme } from "@/hooks/use-appearance"
 import PersistentLayout from "@/layouts/persistent-layout"
 
@@ -70,7 +71,9 @@ void createInertiaApp({
     //   hydrateRoot(el, createElement(App, props))
     //   return
     // }
-    createRoot(el).render(createElement(App, props))
+    createRoot(el).render(
+      createElement(ErrorBoundary, null, createElement(App, props)),
+    )
   },
 
   progress: {
