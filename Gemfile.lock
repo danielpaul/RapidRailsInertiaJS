@@ -172,7 +172,7 @@ GEM
       railties (>= 5)
       sorbet-runtime
     json (2.19.7)
-    jwt (2.10.2)
+    jwt (2.10.3)
       base64
     kamal (2.7.0)
       activesupport (>= 7.0)
