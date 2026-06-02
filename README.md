@@ -7,7 +7,7 @@ A modern full-stack starter application with Rails backend and React frontend us
 - [Inertia Rails](https://inertia-rails.dev) & [Vite Rails](https://vite-ruby.netlify.app) setup
 - [React](https://react.dev) frontend with TypeScript & [shadcn/ui](https://ui.shadcn.com) component library
 - [Clerk](https://clerk.com) User authentication system
-- Email delivery with [Postmark](https://postmarkapp.com) (production) and [letter_opener](https://github.com/ryanb/letter_opener) (development)
+- Email delivery with [Resend](https://resend.com) (production) and [letter_opener](https://github.com/ryanb/letter_opener) (development)
 - [Kamal](https://kamal-deploy.org/) for deployment
 - Optional SSR support
 
@@ -40,37 +40,37 @@ clerk:
   api_key: "sk_test_your_secret_key_here"  # Your Clerk secret key
 
 # For production email delivery
-postmark:
-  api_token: "your_postmark_server_api_token_here"
+resend:
+  api_key: "your_resend_api_key_here"
 ```
 
 #### Email Delivery
 - `FROM_EMAIL` - Email address used as sender for all outgoing emails
-  - Must be verified in your Postmark account for production
+  - Must use a verified domain in your Resend account for production
   - Default: `noreply@example.com`
 - `HOST` - Your application's domain name for generating links in emails (production)
 
-**Email Setup:** This application uses **Postmark** for production email delivery and **letter_opener** for development email preview.
+**Email Setup:** This application uses **Resend** for production email delivery and **letter_opener** for development email preview.
 
 **Development:** No setup required - emails automatically open in your browser.
 
 **Production Setup:**
-1. Sign up for a [Postmark account](https://postmarkapp.com/) and create a server
-2. Add your Postmark API token to Rails credentials:
+1. Sign up for a [Resend account](https://resend.com/) and create an API key
+2. Add your Resend API key to Rails credentials:
    ```bash
    rails credentials:edit
    ```
    Add:
    ```yaml
-   postmark:
-     api_token: "your_postmark_server_api_token_here"
+   resend:
+     api_key: "your_resend_api_key_here"
    ```
 3. Set environment variables:
    ```bash
    FROM_EMAIL=noreply@yourdomain.com
    HOST=yourdomain.com
    ```
-4. Verify the sender signature in your Postmark account
+4. Verify your sending domain in your Resend account
 
 
 ### Optional Environment Variables

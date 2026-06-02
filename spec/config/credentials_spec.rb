@@ -13,8 +13,8 @@ RSpec.describe "Credentials structure" do
       expect(parsed_credentials.dig("clerk", "webhook_secret")).to be_present
     end
 
-    it "includes postmark configuration" do
-      expect(parsed_credentials.dig("postmark", "api_token")).to be_present
+    it "includes resend configuration" do
+      expect(parsed_credentials.dig("resend", "api_key")).to be_present
     end
 
     it "includes sentry configuration" do
