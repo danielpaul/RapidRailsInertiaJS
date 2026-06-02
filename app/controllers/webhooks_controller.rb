@@ -35,7 +35,7 @@ class WebhooksController < ApplicationController
   end
 
   def handle_user_updated(data)
-    clerk_user_id = data[:id]
+    clerk_user_id = data[:id] || data["id"]
 
     user = User.find_by(clerk_id: clerk_user_id)
     if user
@@ -45,27 +45,45 @@ class WebhooksController < ApplicationController
     end
   end
 
+  # Clerk signs webhooks with Svix. Verify the payload using the documented
+  # HMAC-SHA256 scheme: https://docs.svix.com/receiving/verifying-payloads/how-manual
   def verify_webhook_signature
-    # Get the webhook secret from credentials or environment
     webhook_secret = Rails.application.credentials.dig(:clerk, :webhook_secret) || ENV["CLERK_WEBHOOK_SECRET"]
-
     return head :unauthorized unless webhook_secret
 
-    # Get the signature from the request headers
-    signature = request.headers["svix-signature"]
-    timestamp = request.headers["svix-timestamp"]
-    id = request.headers["svix-id"]
+    svix_id = request.headers["svix-id"]
+    svix_timestamp = request.headers["svix-timestamp"]
+    svix_signature = request.headers["svix-signature"]
+    return head :unauthorized unless svix_id && svix_timestamp && svix_signature
 
-    return head :unauthorized unless signature && timestamp && id
+    valid = valid_signature?(webhook_secret, svix_id, svix_timestamp, svix_signature, request.raw_post)
+    return head :unauthorized unless valid
 
-    # Verify the webhook signature using Clerk's verification method
-    begin
-      # This is a simplified verification - in production you'd want to use Clerk's official verification
-      # For now, we'll just check that the request has the required headers
-      Rails.logger.info("Webhook received from Clerk: #{id}")
-    rescue => e
-      Rails.logger.error("Webhook signature verification failed: #{e.message}")
-      head :unauthorized
+    Rails.logger.info("Verified Clerk webhook: #{svix_id}")
+  rescue => e
+    Rails.logger.error("Webhook signature verification failed: #{e.message}")
+    head :unauthorized
+  end
+
+  def valid_signature?(webhook_secret, svix_id, svix_timestamp, svix_signature, payload)
+    return false unless timestamp_within_tolerance?(svix_timestamp)
+
+    # The secret is prefixed with "whsec_" and the remainder is base64 encoded.
+    secret_bytes = Base64.strict_decode64(webhook_secret.delete_prefix("whsec_"))
+    signed_content = "#{svix_id}.#{svix_timestamp}.#{payload}"
+    expected = Base64.strict_encode64(OpenSSL::HMAC.digest("SHA256", secret_bytes, signed_content))
+
+    # The header holds a space-separated list of "version,signature" pairs.
+    svix_signature.split(" ").any? do |versioned_signature|
+      _version, signature = versioned_signature.split(",", 2)
+      signature && ActiveSupport::SecurityUtils.secure_compare(signature, expected)
     end
+  end
+
+  # Reject stale timestamps to guard against replay attacks (5 minute window).
+  def timestamp_within_tolerance?(svix_timestamp, tolerance: 5.minutes)
+    (Time.now.to_i - Integer(svix_timestamp)).abs <= tolerance.to_i
+  rescue ArgumentError, TypeError
+    false
   end
 end
