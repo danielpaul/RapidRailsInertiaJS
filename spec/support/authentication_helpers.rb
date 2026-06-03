@@ -22,7 +22,8 @@ module AuthenticationHelpers
       double("clerk_proxy",
         user?: true,
         user_id: user.clerk_id,
-        organization_id: nil
+        organization_id: nil,
+        organization_role: nil
       )
     )
   end

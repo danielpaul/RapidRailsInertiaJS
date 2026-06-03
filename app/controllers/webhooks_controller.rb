@@ -61,7 +61,7 @@ class WebhooksController < ApplicationController
     user = User.find_by(clerk_id: clerk_user_id)
     if user
       # Clear the cached Clerk user data so it gets refreshed on next access
-      Rails.cache.delete("clerk_user/#{clerk_user_id}")
+      Rails.cache.delete(User.clerk_cache_key(clerk_user_id))
       Rails.logger.info("Cleared cache for updated user #{user.id}")
     end
   end
