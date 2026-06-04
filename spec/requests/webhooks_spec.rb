@@ -50,6 +50,20 @@ RSpec.describe "Webhooks", type: :request do
       end
     end
 
+    context "when an unhandled event type is received" do
+      it "logs the event and still responds 200 so Svix does not retry" do
+        allow(Rails.logger).to receive(:info)
+
+        post webhooks_clerk_url, params: {
+          type: "user.created",
+          data: {id: "user_unhandled"}
+        }
+
+        expect(Rails.logger).to have_received(:info).with("Unhandled Clerk webhook event: user.created")
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
     context "when the same delivery is retried (idempotency)" do
       it "processes a given svix-id only once" do
         # Use a real cache store so the unless_exist guard actually persists

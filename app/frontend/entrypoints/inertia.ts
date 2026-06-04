@@ -1,10 +1,10 @@
 import { createInertiaApp } from "@inertiajs/react"
-import { type ReactNode, createElement } from "react"
+import { createElement } from "react"
 import { createRoot } from "react-dom/client"
 
 import { ErrorBoundary } from "@/components/error-boundary"
 import { initializeTheme } from "@/hooks/use-appearance"
-import PersistentLayout from "@/layouts/persistent-layout"
+import { type ResolvedComponent, resolvePage } from "@/lib/resolve-page"
 
 // Initialize Sentry for error tracking in production only
 if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_DSN) {
@@ -33,11 +33,6 @@ if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_DSN) {
   })
 }
 
-// Temporary type definition, until @inertiajs/react provides one
-interface ResolvedComponent {
-  default: ReactNode & { layout?: (page: ReactNode) => ReactNode }
-}
-
 const appName = (import.meta.env.VITE_APP_NAME ?? "Rails") as string
 
 void createInertiaApp({
@@ -50,19 +45,7 @@ void createInertiaApp({
     const pages = import.meta.glob<ResolvedComponent>("../pages/**/*.tsx", {
       eager: true,
     })
-    const page = pages[`../pages/${name}.tsx`]
-    if (!page) {
-      console.error(`Missing Inertia page component: '${name}.tsx'`)
-    }
-
-    // To use a default layout, import the Layout component
-    // and use the following line.
-    // see https://inertia-rails.dev/guide/pages#default-layouts
-    //
-    page.default.layout ??= (page) =>
-      createElement(PersistentLayout, null, page)
-
-    return page
+    return resolvePage(pages, name)
   },
 
   setup({ el, App, props }) {
