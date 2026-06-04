@@ -42,11 +42,11 @@ gem "thruster", require: false
 gem "vite_rails", "~> 3.0"
 
 # Error tracking with Sentry for production deployments
-gem "sentry-ruby", "~> 5.22"
-gem "sentry-rails", "~> 5.22"
+gem "sentry-ruby", "~> 6.6"
+gem "sentry-rails", "~> 6.6"
 
 # The Rails adapter for Inertia.js [https://inertia-rails.dev]
-gem "inertia_rails", "~> 3.6"
+gem "inertia_rails", "~> 3.21"
 
 # Clerk SDK for authentication
 gem "clerk-sdk-ruby", require: "clerk"

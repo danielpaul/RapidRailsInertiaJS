@@ -10,10 +10,10 @@
   ],
 
   "compilerOptions": {
-    /* Required for shadcn/ui */
-    "baseUrl": "./app/frontend",
+    /* Required for shadcn/ui (paths resolve relative to this config; baseUrl
+       removed as it is deprecated in TypeScript 6 and slated for removal in 7) */
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./app/frontend/*"]
     }
   }
 }
