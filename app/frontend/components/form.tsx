@@ -81,7 +81,7 @@ const FormField = <
       id: string
       name: string
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-      onKeyPress: () => void
+      onKeyDown: () => void
       value: FormDataConvertible
     }
   }) => React.ReactNode
@@ -103,7 +103,7 @@ interface FieldProps {
   id: string
   name: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onKeyPress: () => void
+  onKeyDown: () => void
   value: FormDataConvertible
 }
 
@@ -126,7 +126,9 @@ const Renderer = ({
       name,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
         form.setData(name, e.target.value),
-      onKeyPress: () => {
+      // Clear a field's error as soon as the user starts correcting it.
+      // (React deprecated onKeyPress in favour of onKeyDown.)
+      onKeyDown: () => {
         if (form.errors[name]) {
           form.clearErrors(name)
         }

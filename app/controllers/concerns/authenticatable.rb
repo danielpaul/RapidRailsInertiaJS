@@ -38,13 +38,4 @@ module Authenticatable
   def current_org
     clerk_auth.org
   end
-
-  def org_account?
-    current_org.present?
-  end
-
-  # The user's role in the active org, read live from the Clerk token.
-  def current_user_org_role
-    clerk_auth.role
-  end
 end

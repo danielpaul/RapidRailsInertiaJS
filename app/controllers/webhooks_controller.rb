@@ -43,8 +43,10 @@ class WebhooksController < ApplicationController
   end
 
   def handle_user_deleted(data)
-    # Clerk webhook payload structure: data contains the user object
-    clerk_user_id = data[:id] || data["id"]
+    # Clerk webhook payload structure: data contains the user object.
+    # `data` is ActionController::Parameters, which already supports both
+    # symbol and string keys, so a single lookup is enough.
+    clerk_user_id = data[:id]
 
     user = User.find_by(clerk_id: clerk_user_id)
     if user
@@ -56,7 +58,7 @@ class WebhooksController < ApplicationController
   end
 
   def handle_user_updated(data)
-    clerk_user_id = data[:id] || data["id"]
+    clerk_user_id = data[:id]
 
     user = User.find_by(clerk_id: clerk_user_id)
     if user
