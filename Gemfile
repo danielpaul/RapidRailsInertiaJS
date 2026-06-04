@@ -95,6 +95,9 @@ group :development do
 
   # Fast, powerful Git hooks manager [https://github.com/evilmartians/lefthook]
   gem "lefthook", require: false
+
+  # Annotate models with the database schema [https://github.com/drwl/annotaterb]
+  gem "annotaterb"
 end
 
 group :test do
