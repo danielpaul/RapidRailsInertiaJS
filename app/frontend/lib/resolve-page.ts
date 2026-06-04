@@ -1,10 +1,12 @@
-import { type ReactNode, createElement } from "react"
+import { type ComponentType, type ReactNode, createElement } from "react"
 
 import PersistentLayout from "@/layouts/persistent-layout"
 
-// Temporary type definition, until @inertiajs/react provides one
+// Temporary type definition, until @inertiajs/react provides one. A page module's
+// default export is a React component (function/class), optionally carrying a
+// `layout` wrapper — not a rendered node.
 export interface ResolvedComponent {
-  default: ReactNode & { layout?: (page: ReactNode) => ReactNode }
+  default: ComponentType & { layout?: (page: ReactNode) => ReactNode }
 }
 
 // Shared page resolver for the client (entrypoints/inertia.ts) and SSR
