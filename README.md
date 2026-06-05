@@ -14,12 +14,59 @@ A modern full-stack starter application with Rails backend and React frontend us
 ## Setup
 
 1. Clone this repository
-2. Set up environment variables (see [Environment Variables](#environment-variables))
-3. Setup dependencies & run the server:
+2. Run the setup script:
    ```bash
    bin/setup
    ```
+   `bin/setup` is idempotent and will, in order:
+   - Install Ruby (Bundler) and JavaScript (npm) dependencies.
+   - Create a `.env` file from `.env.example` if one doesn't already exist.
+   - Make sure your Rails encrypted credentials can be decrypted (see
+     [Rails Credentials & the Master Key](#rails-credentials--the-master-key)).
+   - Prepare the database and clear old logs/tempfiles.
+   - Start the development server (pass `--skip-server` to stop before this).
+3. Fill in your secrets (the script will remind you at the end):
+   - Edit `.env` and set `VITE_CLERK_PUBLISHABLE_KEY` (and any other keys you need).
+   - Edit your Rails credentials with `bin/rails credentials:edit` (Clerk
+     `secret_key` / `webhook_secret`, Resend `api_key`, etc.).
+   - See [Environment Variables](#environment-variables) for the full list.
 4. Open http://localhost:3000
+
+### What you need before you start
+
+- **Ruby** and **Node.js** matching the versions in `.ruby-version` and `.tool-versions`.
+- A **Clerk** account for authentication ([sign up](https://clerk.com)) — you'll need a
+  publishable key (for `.env`) and a secret key (for Rails credentials).
+- The **Rails master key** for this app's encrypted credentials. The encrypted
+  `config/credentials.yml.enc` is committed to the repo, but `config/master.key`
+  is intentionally **not** (it's gitignored). See below.
+
+### Rails Credentials & the Master Key
+
+Rails stores secrets in an encrypted file, `config/credentials.yml.enc`, which is
+decrypted with `config/master.key` (or the `RAILS_MASTER_KEY` environment
+variable). The master key is gitignored and never committed, so a fresh clone has
+the encrypted file but no key to read it.
+
+`bin/setup` detects this situation and offers three choices:
+
+1. **Enter the existing master key** — paste the key shared securely by a teammate
+   (or your secrets manager). The script writes it to `config/master.key`.
+2. **Delete and regenerate** — permanently deletes the existing
+   `config/credentials.yml.enc`, then runs `bin/rails credentials:edit` to create a
+   brand new master key and credentials file. Use this if you don't have the
+   original key (e.g. you're starting your own project from this template). You'll
+   need to re-add every secret afterwards — see `config/credentials.yml.example`
+   for the expected structure.
+3. **Skip** — leave it for now and fix it manually before booting the app.
+
+You can also set `RAILS_MASTER_KEY` in your environment instead of using a
+`config/master.key` file (recommended for production / CI).
+
+To view or edit credentials at any time:
+```bash
+bin/rails credentials:edit
+```
 
 ## Environment Variables
 
